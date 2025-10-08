@@ -2,8 +2,8 @@
 node_modules/
 
 # Generated asset outputs
-images/
-metadata/
+# images/
+# metadata/
 
 # Lockfiles / logs
 npm-debug.log*

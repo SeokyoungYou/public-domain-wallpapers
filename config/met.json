@@ -2,30 +2,72 @@
   "categories": [
     {
       "id": "impressionism",
-      "name": "Impressionist Paintings",
-      "query": "impressionism painting",
+      "name": "Impressionist Favorites",
+      "objectIds": [
+        "436155",
+        "436449",
+        "436965",
+        "437984",
+        "671456"
+      ],
       "limit": 5
     },
     {
-      "id": "renaissance",
-      "name": "Renaissance Highlights",
-      "query": "renaissance painting"
-    },
-    {
       "id": "japanese-prints",
-      "name": "Japanese Woodblock Prints",
-      "query": "ukiyo-e landscape"
+      "name": "Japanese Woodblock Icons",
+      "objectIds": [
+        "436535"
+      ],
+      "limit": 1
     },
     {
-      "id": "post-impressionism",
-      "name": "Post-Impressionism",
-      "query": "post impressionism painting",
-      "limit": 6
+      "id": "met-van-gogh-masterworks",
+      "name": "Vincent van Gogh Masterworks",
+      "objectIds": [
+        "436532",
+        "435809",
+        "436105",
+        "437984",
+        "436449"
+      ],
+      "limit": 5
     },
     {
-      "id": "still-life",
-      "name": "Still Life Classics",
-      "query": "still life oil painting"
+      "id": "met-monet-water-lilies",
+      "name": "Claude Monet Water & Garden Views",
+      "objectIds": [
+        "437853",
+        "436839",
+        "436965",
+        "671456"
+      ],
+      "limit": 4
+    },
+    {
+      "id": "met-impressionist-portraits",
+      "name": "Impressionist Portrait Highlights",
+      "objectIds": [
+        "436121",
+        "435809",
+        "437984",
+        "436449"
+      ],
+      "limit": 4
+    },
+    {
+      "id": "met-popular-masterpieces",
+      "name": "Met Popular Masterpieces",
+      "objectIds": [
+        "436535",
+        "436121",
+        "436532",
+        "437853",
+        "436839",
+        "435809",
+        "436105",
+        "436106"
+      ],
+      "limit": 8
     }
   ]
 }

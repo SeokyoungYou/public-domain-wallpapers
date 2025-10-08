@@ -12,7 +12,7 @@ const IMAGE_ROOT = path.join(PROJECT_ROOT, "images");
 const METADATA_ROOT = path.join(PROJECT_ROOT, "metadata");
 const CONFIG_ROOT = path.join(PROJECT_ROOT, "config");
 
-const DEFAULT_LIMIT = 10;
+const DEFAULT_LIMIT = 5;
 const NASA_PAGE_SIZE = 100;
 
 const SOURCE_CONFIG = {
@@ -20,7 +20,75 @@ const SOURCE_CONFIG = {
     label: "The Met Museum Open Access",
     license: "Public Domain (The Met Open Access)",
     configFile: path.join(CONFIG_ROOT, "met.json"),
-    async fetchBatch({ limit, query, offset }) {
+    async fetchBatch({ limit, query, offset, category }) {
+      const sourceKey = "met";
+      const categoryIds = Array.isArray(category.objectIds)
+        ? category.objectIds.map((value) => String(value).trim()).filter(Boolean)
+        : [];
+
+      if (categoryIds.length > 0) {
+        if (offset >= categoryIds.length) {
+          return { items: [], nextOffset: categoryIds.length };
+        }
+
+        const results = [];
+        let nextOffset = offset;
+
+        for (let index = offset; index < categoryIds.length && results.length < limit; index += 1) {
+          const objectId = categoryIds[index];
+          const storageKey = makeStorageKey(sourceKey, objectId);
+          const imagePath = path.join(
+            IMAGE_ROOT,
+            sourceKey,
+            category.id,
+            `${storageKey}.webp`,
+          );
+          const metadataPath = path.join(
+            METADATA_ROOT,
+            sourceKey,
+            category.id,
+            `${storageKey}.json`,
+          );
+
+          if (await fileExists(imagePath) && await fileExists(metadataPath)) {
+            console.log(`[${sourceKey}] Skipping cached object ${objectId}`);
+            nextOffset = index + 1;
+            continue;
+          }
+
+          const objectUrl = `https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectId}`;
+          const objectResponse = await fetch(objectUrl);
+
+          nextOffset = index + 1;
+
+          if (!objectResponse.ok) {
+            console.warn(`Failed to fetch Met object ${objectId}: ${objectResponse.status}`);
+            continue;
+          }
+
+          const data = await objectResponse.json();
+          const imageUrl = data.primaryImage || data.primaryImageSmall;
+
+          if (!imageUrl) {
+            continue;
+          }
+
+          results.push({
+            id: String(objectId),
+            storageKey,
+            title: data.title ?? "Unknown title",
+            author: data.artistDisplayName || "Unknown artist",
+            description: data.creditLine ?? data.department ?? "",
+            year: data.objectDate ?? "",
+            imageUrl,
+            sourceUrl: data.objectURL,
+            license: "Public Domain (The Met Open Access)",
+          });
+        }
+
+        return { items: results, nextOffset };
+      }
+
       if (!query) {
         return { items: [], nextOffset: offset };
       }
@@ -53,6 +121,25 @@ const SOURCE_CONFIG = {
         if (results.length >= limit) break;
 
         nextOffset += 1;
+        const storageKey = makeStorageKey(sourceKey, objectId);
+        const imagePath = path.join(
+          IMAGE_ROOT,
+          sourceKey,
+          category.id,
+          `${storageKey}.webp`,
+        );
+        const metadataPath = path.join(
+          METADATA_ROOT,
+          sourceKey,
+          category.id,
+          `${storageKey}.json`,
+        );
+
+        if (await fileExists(imagePath) && await fileExists(metadataPath)) {
+          console.log(`[${sourceKey}] Skipping cached object ${objectId}`);
+          continue;
+        }
+
         const objectUrl = `https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectId}`;
         const objectResponse = await fetch(objectUrl);
 
@@ -72,6 +159,7 @@ const SOURCE_CONFIG = {
 
         results.push({
           id: String(objectId),
+          storageKey,
           title: data.title ?? "Unknown title",
           author: data.artistDisplayName || "Unknown artist",
           description: data.creditLine ?? data.department ?? "",
@@ -89,7 +177,68 @@ const SOURCE_CONFIG = {
     label: "NASA Image and Video Library",
     license: "Public Domain (NASA)",
     configFile: path.join(CONFIG_ROOT, "nasa.json"),
-    async fetchBatch({ limit, query, offset }) {
+    async fetchBatch({ limit, query, offset, category }) {
+      const sourceKey = "nasa";
+      const categoryIds = Array.isArray(category.nasaIds)
+        ? category.nasaIds.map((value) => String(value).trim()).filter(Boolean)
+        : [];
+
+      if (categoryIds.length > 0) {
+        if (offset >= categoryIds.length) {
+          return { items: [], nextOffset: categoryIds.length };
+        }
+
+        const results = [];
+        let nextOffset = offset;
+
+        for (let index = offset; index < categoryIds.length && results.length < limit; index += 1) {
+          const nasaId = categoryIds[index];
+          const storageKey = makeStorageKey(sourceKey, nasaId);
+          const imagePath = path.join(
+            IMAGE_ROOT,
+            sourceKey,
+            category.id,
+            `${storageKey}.webp`,
+          );
+          const metadataPath = path.join(
+            METADATA_ROOT,
+            sourceKey,
+            category.id,
+            `${storageKey}.json`,
+          );
+
+          if (await fileExists(imagePath) && await fileExists(metadataPath)) {
+            console.log(`[${sourceKey}] Skipping cached asset ${nasaId}`);
+            nextOffset = index + 1;
+            continue;
+          }
+
+          const item = await fetchNasaItemById(nasaId);
+
+          nextOffset = index + 1;
+
+          if (!item) continue;
+
+          const { metadata, assetUrl } = item;
+
+          results.push({
+            id: metadata.nasa_id ?? randomUUID(),
+            storageKey,
+            title: metadata.title ?? "Untitled NASA image",
+            author: metadata.photographer || metadata.secondary_creator || "NASA",
+            description: metadata.description ?? "",
+            year: metadata.date_created?.slice(0, 4) ?? "",
+            imageUrl: assetUrl,
+            sourceUrl: metadata.nasa_id
+              ? `https://images.nasa.gov/details-${metadata.nasa_id}`
+              : "",
+            license: "Public Domain (NASA)",
+          });
+        }
+
+        return { items: results, nextOffset };
+      }
+
       if (!query) {
         return { items: [], nextOffset: offset };
       }
@@ -137,8 +286,12 @@ const SOURCE_CONFIG = {
           const assetUrl = await resolveNasaAssetUrl(item);
           if (!assetUrl) continue;
 
+          const assetId = metadata.nasa_id ?? randomUUID();
+          const storageKey = makeStorageKey(sourceKey, assetId);
+
           results.push({
-            id: metadata.nasa_id ?? randomUUID(),
+            id: assetId,
+            storageKey,
             title: metadata.title ?? "Untitled NASA image",
             author:
               metadata.photographer || metadata.secondary_creator || "NASA",
@@ -192,6 +345,32 @@ async function resolveNasaAssetUrl(item) {
   const fallback =
     item.links?.find((link) => link.render === "image") ?? item.links?.[0];
   return fallback?.href;
+}
+
+async function fetchNasaItemById(nasaId) {
+  const params = new URLSearchParams({
+    nasa_id: nasaId,
+    media_type: "image",
+  });
+  const searchUrl = `https://images-api.nasa.gov/search?${params.toString()}`;
+  const response = await fetch(searchUrl);
+
+  if (!response.ok) {
+    console.warn(`Failed to fetch NASA item ${nasaId}: ${response.status}`);
+    return null;
+  }
+
+  const data = await response.json();
+  const item = data.collection?.items?.[0];
+  if (!item) return null;
+
+  const metadata = item.data?.[0];
+  if (!metadata) return null;
+
+  const assetUrl = await resolveNasaAssetUrl(item);
+  if (!assetUrl) return null;
+
+  return { metadata, assetUrl };
 }
 
 function parseArgs() {
@@ -264,19 +443,29 @@ async function loadSourceCategories(sourceKey) {
 
   return categories
     .map((category, index) => {
-      const query = category.query?.trim();
+      const query =
+        typeof category.query === "string" ? category.query.trim() : "";
+      const hasQuery = query.length > 0;
+      const hasObjectIds =
+        Array.isArray(category.objectIds) &&
+        category.objectIds.some((value) => String(value).trim().length > 0);
+      const hasNasaIds =
+        Array.isArray(category.nasaIds) &&
+        category.nasaIds.some((value) => String(value).trim().length > 0);
 
-      if (!query) {
+      if (!hasQuery && !hasObjectIds && !hasNasaIds) {
         console.warn(
-          `Skipping ${sourceKey} category without query at index ${index}`
+          `Skipping ${sourceKey} category without query or IDs at index ${index}`
         );
         return null;
       }
 
+      const fallbackId = hasQuery
+        ? sanitizeFileName(query)
+        : sanitizeFileName(`${sourceKey}-category-${index + 1}`);
+
       const id =
-        category.id?.trim() ||
-        sanitizeFileName(query) ||
-        `category-${index + 1}`;
+        category.id?.trim() || fallbackId || `category-${index + 1}`;
 
       return {
         ...category,
@@ -406,6 +595,11 @@ function sanitizeFileName(input) {
     .slice(0, 80);
 }
 
+function makeStorageKey(sourceKey, id) {
+  const idPart = id && String(id).trim().length > 0 ? String(id).trim() : randomUUID();
+  return sanitizeFileName(`${sourceKey}-${idPart}`);
+}
+
 async function downloadAndConvert({
   sourceKey,
   categoryId,
@@ -414,9 +608,7 @@ async function downloadAndConvert({
   imageDir,
   metadataDir,
 }) {
-  const baseName = sanitizeFileName(
-    `${categoryId}-${item.title || sourceKey}-${item.id}`
-  );
+  const baseName = item.storageKey ?? makeStorageKey(sourceKey, item.id);
   const imagePath = path.join(imageDir, `${baseName}.webp`);
   const metadataPath = path.join(metadataDir, `${baseName}.json`);
 
@@ -519,6 +711,7 @@ async function run() {
         limit: categoryLimit,
         query: category.query,
         offset,
+        category,
       });
 
       console.log(
