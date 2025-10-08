@@ -4,6 +4,13 @@
   "description": "Public domain and CC0 artwork wallpapers packaged for easy consumption.",
   "type": "module",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "images-eink/**/*.webp",
+    "metadata/**/*",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "fetch:assets": "node scripts/fetch-assets.js",
