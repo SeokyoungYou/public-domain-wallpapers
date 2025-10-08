@@ -46,34 +46,26 @@ async function fileExists(filePath) {
 }
 
 /**
- * Load wallpapers with paired metadata and image paths.
- *
+ * 해당 카테고리의 메타데이터 및 e-ink 이미지 경로를 불러온다.
+ * @param {string} category - metadata 루트 하위의 상위 디렉터리 이름 (예: "met").
  * @param {Object} [options]
- * @param {string} [options.imageRoot="images-eink"] - Folder (relative to package root) that stores the image assets.
- * @param {string} [options.imageExtension=".webp"] - Image file extension (with or without leading dot).
- * @param {boolean} [options.includeAbsolutePaths=false] - Include absolute filesystem paths in the returned entries.
- * @returns {Promise<Array<Object>>} List of wallpaper entries including metadata, relative specifiers, and optional absolute paths.
+ * @param {boolean} [options.includeAbsolutePaths=false] - 결과에 절대 경로를 포함할지 여부.
+ * @returns {Promise<Array<Object>>}
  */
-export async function loadWallpapers(options = {}) {
-  const {
-    imageRoot = "images-eink",
-    imageExtension = ".webp",
-    includeAbsolutePaths = false,
-  } = options;
-
+async function loadCategoryWallpapers(category, options = {}) {
+  const { includeAbsolutePaths = false } = options;
   if (!(await fileExists(METADATA_DIR))) {
     return [];
   }
 
   const metadataFiles = await listMetadataFiles(METADATA_DIR);
-  const normalizedExtension = imageExtension.startsWith(".")
-    ? imageExtension
-    : `.${imageExtension}`;
+  const filtered = metadataFiles.filter((relativePath) => relativePath.startsWith(`${category}/`));
+  const imageRoot = "images-eink";
   const imageBaseDir = path.join(__dirname, imageRoot);
 
   const wallpapers = [];
 
-  for (const metadataRelative of metadataFiles) {
+  for (const metadataRelative of filtered) {
     const metadataSegments = metadataRelative.split("/");
     const metadataAbsolute = path.join(METADATA_DIR, ...metadataSegments);
     const raw = await readFile(metadataAbsolute, "utf8");
@@ -86,11 +78,11 @@ export async function loadWallpapers(options = {}) {
       ? `${relativeDirSegments.join("/")}/${stem}`
       : stem;
 
-    const imageRelative = `${imageRoot}/${baseName}${normalizedExtension}`;
+    const imageRelative = `${imageRoot}/${baseName}.webp`;
     const imageAbsolute = path.join(
       imageBaseDir,
       ...relativeDirSegments,
-      `${stem}${normalizedExtension}`,
+      `${stem}.webp`,
     );
     const hasImage = await fileExists(imageAbsolute);
 
@@ -113,7 +105,10 @@ export async function loadWallpapers(options = {}) {
   return wallpapers;
 }
 
-/**
- * @deprecated Use `loadWallpapers()` instead.
- */
-export const wallpapers = [];
+export async function loadMetWallpapers(options = {}) {
+  return loadCategoryWallpapers("met", options);
+}
+
+export async function loadNasaWallpapers(options = {}) {
+  return loadCategoryWallpapers("nasa", options);
+}

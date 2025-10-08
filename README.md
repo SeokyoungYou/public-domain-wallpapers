@@ -31,6 +31,17 @@ console.log(hokusai.license); // "Public Domain (The Met Open Access)"
 
 If you prefer CommonJS, use `createRequire` to load the same JSON files.
 
+When you need to enumerate many records at once, the package also ships programmatic helpers that pair each metadata entry with its optimised e-ink image path:
+
+```js
+import { loadMetWallpapers, loadNasaWallpapers } from "public-domain-wallpapers";
+
+const metWallpapers = await loadMetWallpapers(); // only items that live in metadata/met
+const nasaWallpapers = await loadNasaWallpapers({ includeAbsolutePaths: true });
+```
+
+Both helpers return an array of `{ id, metadata, metadataPath, imagePath }`. When `includeAbsolutePaths` is `true`, additional `metadataFile` and `imageFile` fields are provided so you can copy or post-process assets directly from the package directory. The `imagePath` always points to the optimised WebP file found under `images-eink/`.
+
 ### 2. Serve the optimised images
 
 Published image assets live under `images-eink/` and are already WebP compressed. A simple Node script can copy them into your own static directory:
