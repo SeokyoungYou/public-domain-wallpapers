@@ -1,0 +1,31 @@
+{
+  "categories": [
+    {
+      "id": "nebulae",
+      "name": "Nebulae",
+      "query": "nebula",
+      "limit": 5
+    },
+    {
+      "id": "earth-views",
+      "name": "Earth Views",
+      "query": "earth from space"
+    },
+    {
+      "id": "mission-highlights",
+      "name": "Mission Highlights",
+      "query": "apollo mission"
+    },
+    {
+      "id": "galaxies",
+      "name": "Deep Space Galaxies",
+      "query": "galaxy",
+      "limit": 6
+    },
+    {
+      "id": "mars-landscapes",
+      "name": "Mars Landscapes",
+      "query": "mars surface"
+    }
+  ]
+}

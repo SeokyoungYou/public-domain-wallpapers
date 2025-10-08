@@ -1,0 +1,31 @@
+{
+  "categories": [
+    {
+      "id": "impressionism",
+      "name": "Impressionist Paintings",
+      "query": "impressionism painting",
+      "limit": 5
+    },
+    {
+      "id": "renaissance",
+      "name": "Renaissance Highlights",
+      "query": "renaissance painting"
+    },
+    {
+      "id": "japanese-prints",
+      "name": "Japanese Woodblock Prints",
+      "query": "ukiyo-e landscape"
+    },
+    {
+      "id": "post-impressionism",
+      "name": "Post-Impressionism",
+      "query": "post impressionism painting",
+      "limit": 6
+    },
+    {
+      "id": "still-life",
+      "name": "Still Life Classics",
+      "query": "still life oil painting"
+    }
+  ]
+}
