@@ -1,0 +1,18 @@
+{
+  "name": "public-domain-wallpapers",
+  "version": "0.1.0",
+  "description": "Public domain and CC0 artwork wallpapers packaged for easy consumption.",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wallpaper",
+    "art",
+    "public-domain",
+    "cc0"
+  ],
+  "author": "",
+  "license": "MIT"
+}
