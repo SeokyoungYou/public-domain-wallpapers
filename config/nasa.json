@@ -1,116 +1,23 @@
 {
   "categories": [
     {
-      "id": "nebulae",
-      "name": "Nebulae",
+      "id": "nasa-featured-collection",
+      "name": "Featured Collection",
       "nasaIds": [
-        "PIA04257",
-        "PIA09178",
-        "PIA18885",
         "PIA12348",
-        "PIA21421"
-      ],
-      "limit": 5
-    },
-    {
-      "id": "earth-views",
-      "name": "Earth Views",
-      "nasaIds": [
-        "PIA18033",
+        "PIA26966",
+        "PIA22946",
         "PIA02652",
-        "PIA00123",
         "PIA04921",
-        "PIA19459"
+        "PIA18920",
+        "ISS043-E-93880",
+        "ISS047-E-33526",
+        "ISS048-E-100172",
+        "ISS057-E-066995",
+        "ISS065-E-017382",
+        "PIA19808"
       ],
-      "limit": 5
-    },
-    {
-      "id": "mission-highlights",
-      "name": "Mission Highlights",
-      "nasaIds": [
-        "AS11-40-5874",
-        "AS11-44-6553",
-        "S72-37050",
-        "S67-50531",
-        "S50-56285"
-      ],
-      "limit": 5
-    },
-    {
-      "id": "galaxies",
-      "name": "Deep Space Galaxies",
-      "nasaIds": [
-        "PIA04626",
-        "PIA16695",
-        "PIA04210",
-        "PIA21472",
-        "PIA18839",
-        "PIA04982"
-      ],
-      "limit": 6
-    },
-    {
-      "id": "mars-landscapes",
-      "name": "Mars Landscapes",
-      "nasaIds": [
-        "PIA20012",
-        "PIA19066",
-        "PIA19808",
-        "PIA00563",
-        "PIA04663"
-      ],
-      "limit": 5
-    },
-    {
-      "id": "nasa-iconic",
-      "name": "Iconic NASA Imagery",
-      "nasaIds": [
-        "PIA12235",
-        "PIA04257",
-        "PIA03149",
-        "PIA18033",
-        "AS11-40-5874",
-        "PIA21070",
-        "PIA04921",
-        "PIA01320"
-      ],
-      "limit": 8
-    },
-    {
-      "id": "nasa-apollo-legacy",
-      "name": "Apollo Legacy Missions",
-      "nasaIds": [
-        "AS11-40-5874",
-        "AS11-44-6553",
-        "AS08-14-2383",
-        "AS17-148-22727",
-        "AS09-20-3064"
-      ],
-      "limit": 5
-    },
-    {
-      "id": "nasa-hubble-heritage",
-      "name": "Hubble Heritage Favorites",
-      "nasaIds": [
-        "PIA04257",
-        "PIA04626",
-        "PIA18839",
-        "PIA13405",
-        "PIA12348"
-      ],
-      "limit": 5
-    },
-    {
-      "id": "nasa-mars-rovers",
-      "name": "Mars Rover Highlights",
-      "nasaIds": [
-        "PIA19808",
-        "PIA19803",
-        "PIA16453",
-        "PIA19066",
-        "PIA22616"
-      ],
-      "limit": 5
+      "limit": 12
     }
   ]
 }

@@ -11,9 +11,11 @@ const PROJECT_ROOT = path.resolve(__dirname, "..");
 const IMAGE_ROOT = path.join(PROJECT_ROOT, "images");
 const METADATA_ROOT = path.join(PROJECT_ROOT, "metadata");
 const CONFIG_ROOT = path.join(PROJECT_ROOT, "config");
+const IGNORE_FILE = path.join(CONFIG_ROOT, "ignored-assets.json");
 
 const DEFAULT_LIMIT = 5;
 const NASA_PAGE_SIZE = 100;
+let IGNORE_SETS = {};
 
 const SOURCE_CONFIG = {
   met: {
@@ -36,6 +38,11 @@ const SOURCE_CONFIG = {
 
         for (let index = offset; index < categoryIds.length && results.length < limit; index += 1) {
           const objectId = categoryIds[index];
+          if (shouldIgnore(sourceKey, objectId)) {
+            console.log(`[${sourceKey}] Ignoring object ${objectId} via ignore list`);
+            nextOffset = index + 1;
+            continue;
+          }
           const storageKey = makeStorageKey(sourceKey, objectId);
           const imagePath = path.join(
             IMAGE_ROOT,
@@ -122,6 +129,10 @@ const SOURCE_CONFIG = {
 
         nextOffset += 1;
         const storageKey = makeStorageKey(sourceKey, objectId);
+        if (shouldIgnore(sourceKey, objectId)) {
+          console.log(`[${sourceKey}] Ignoring object ${objectId} via ignore list`);
+          continue;
+        }
         const imagePath = path.join(
           IMAGE_ROOT,
           sourceKey,
@@ -193,6 +204,11 @@ const SOURCE_CONFIG = {
 
         for (let index = offset; index < categoryIds.length && results.length < limit; index += 1) {
           const nasaId = categoryIds[index];
+          if (shouldIgnore(sourceKey, nasaId)) {
+            console.log(`[${sourceKey}] Ignoring asset ${nasaId} via ignore list`);
+            nextOffset = index + 1;
+            continue;
+          }
           const storageKey = makeStorageKey(sourceKey, nasaId);
           const imagePath = path.join(
             IMAGE_ROOT,
@@ -283,15 +299,19 @@ const SOURCE_CONFIG = {
           const metadata = item.data?.[0];
           if (!metadata) continue;
 
-          const assetUrl = await resolveNasaAssetUrl(item);
-          if (!assetUrl) continue;
+        const assetUrl = await resolveNasaAssetUrl(item);
+        if (!assetUrl) continue;
 
-          const assetId = metadata.nasa_id ?? randomUUID();
-          const storageKey = makeStorageKey(sourceKey, assetId);
+        const assetId = metadata.nasa_id ?? randomUUID();
+        const storageKey = makeStorageKey(sourceKey, assetId);
+        if (shouldIgnore(sourceKey, assetId)) {
+          console.log(`[${sourceKey}] Ignoring asset ${assetId} via ignore list`);
+          continue;
+        }
 
-          results.push({
-            id: assetId,
-            storageKey,
+        results.push({
+          id: assetId,
+          storageKey,
             title: metadata.title ?? "Untitled NASA image",
             author:
               metadata.photographer || metadata.secondary_creator || "NASA",
@@ -420,6 +440,60 @@ async function fileExists(filePath) {
 async function readJsonFile(filePath) {
   const contents = await readFile(filePath, "utf8");
   return JSON.parse(contents);
+}
+
+function shouldIgnore(sourceKey, id) {
+  if (!id) return false;
+  const key = String(sourceKey);
+  const value = String(id).trim();
+  if (!value) return false;
+  const set = IGNORE_SETS[key];
+  return set ? set.has(value) : false;
+}
+
+async function loadIgnoreSets() {
+  let parsed;
+  try {
+    parsed = await readJsonFile(IGNORE_FILE);
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      console.warn(`Failed to read ignore list at ${IGNORE_FILE}: ${error.message}`);
+    }
+    IGNORE_SETS = {};
+    return;
+  }
+
+  if (!parsed || typeof parsed !== "object") {
+    IGNORE_SETS = {};
+    return;
+  }
+
+  const nextSets = {};
+  for (const [sourceKey, value] of Object.entries(parsed)) {
+    const set = new Set();
+    if (Array.isArray(value)) {
+      value.forEach((item) => {
+        const str = String(item).trim();
+        if (str) set.add(str);
+      });
+    } else if (value && typeof value === "object") {
+      const candidates = [
+        ...(Array.isArray(value.objectIds) ? value.objectIds : []),
+        ...(Array.isArray(value.nasaIds) ? value.nasaIds : []),
+        ...(Array.isArray(value.ids) ? value.ids : []),
+      ];
+      candidates.forEach((item) => {
+        const str = String(item).trim();
+        if (str) set.add(str);
+      });
+    }
+
+    if (set.size > 0) {
+      nextSets[sourceKey] = set;
+    }
+  }
+
+  IGNORE_SETS = nextSets;
 }
 
 async function loadSourceCategories(sourceKey) {
@@ -608,6 +682,13 @@ async function downloadAndConvert({
   imageDir,
   metadataDir,
 }) {
+  if (shouldIgnore(sourceKey, item.id)) {
+    console.log(
+      `[${sourceKey}] Skipping ${item.id} (${item.title || "untitled"}) due to ignore list entry`
+    );
+    return false;
+  }
+
   const baseName = item.storageKey ?? makeStorageKey(sourceKey, item.id);
   const imagePath = path.join(imageDir, `${baseName}.webp`);
   const metadataPath = path.join(metadataDir, `${baseName}.json`);
@@ -634,6 +715,7 @@ async function downloadAndConvert({
 
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
+
     const webpBuffer = await sharp(buffer).webp({ quality: 92 }).toBuffer();
 
     await writeFile(imagePath, webpBuffer);
@@ -672,6 +754,7 @@ async function downloadAndConvert({
 async function run() {
   const { sources, limit } = parseArgs();
 
+  await loadIgnoreSets();
   await Promise.all([ensureDir(IMAGE_ROOT), ensureDir(METADATA_ROOT)]);
 
   for (const sourceKey of sources) {
