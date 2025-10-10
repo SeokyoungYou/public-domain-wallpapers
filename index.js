@@ -8,7 +8,8 @@ const MET_WALLPAPERS = [
     "author": "Pieter Bruegel the Elder",
     "year": "1565",
     "source": "met",
-    "imagePath": "images-eink/met/met-featured-collection/met-435809.webp"
+    "imagePath": "images-eink/met/met-featured-collection/met-435809.webp",
+    image: require('./images-eink/met/met-featured-collection/met-435809.webp')
   },
   {
     "id": "436839",
@@ -16,7 +17,8 @@ const MET_WALLPAPERS = [
     "author": "Georges de La Tour",
     "year": "ca. 1640",
     "source": "met",
-    "imagePath": "images-eink/met/met-featured-collection/met-436839.webp"
+    "imagePath": "images-eink/met/met-featured-collection/met-436839.webp",
+    image: require('./images-eink/met/met-featured-collection/met-436839.webp')
   },
   {
     "id": "436965",
@@ -24,7 +26,8 @@ const MET_WALLPAPERS = [
     "author": "Edouard Manet",
     "year": "1874",
     "source": "met",
-    "imagePath": "images-eink/met/met-featured-collection/met-436965.webp"
+    "imagePath": "images-eink/met/met-featured-collection/met-436965.webp",
+    image: require('./images-eink/met/met-featured-collection/met-436965.webp')
   },
   {
     "id": "437853",
@@ -32,7 +35,8 @@ const MET_WALLPAPERS = [
     "author": "Joseph Mallord William Turner",
     "year": "ca. 1835",
     "source": "met",
-    "imagePath": "images-eink/met/met-featured-collection/met-437853.webp"
+    "imagePath": "images-eink/met/met-featured-collection/met-437853.webp",
+    image: require('./images-eink/met/met-featured-collection/met-437853.webp')
   },
   {
     "id": "671456",
@@ -40,7 +44,8 @@ const MET_WALLPAPERS = [
     "author": "Gustave Caillebotte",
     "year": "1893",
     "source": "met",
-    "imagePath": "images-eink/met/met-featured-collection/met-671456.webp"
+    "imagePath": "images-eink/met/met-featured-collection/met-671456.webp",
+    image: require('./images-eink/met/met-featured-collection/met-671456.webp')
   }
 ];
 
@@ -51,7 +56,8 @@ const NASA_WALLPAPERS = [
     "author": "NASA/JPL",
     "year": "2000",
     "source": "nasa",
-    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia02652.webp"
+    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia02652.webp",
+    image: require('./images-eink/nasa/nasa-featured-collection/nasa-pia02652.webp')
   },
   {
     "id": "PIA04921",
@@ -59,7 +65,8 @@ const NASA_WALLPAPERS = [
     "author": "NASA/JPL/California Institute of Technology",
     "year": "2003",
     "source": "nasa",
-    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia04921.webp"
+    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia04921.webp",
+    image: require('./images-eink/nasa/nasa-featured-collection/nasa-pia04921.webp')
   },
   {
     "id": "PIA12348",
@@ -67,7 +74,8 @@ const NASA_WALLPAPERS = [
     "author": "NASA/JPL-Caltech/ESA/CXC/STScI",
     "year": "2009",
     "source": "nasa",
-    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia12348.webp"
+    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia12348.webp",
+    image: require('./images-eink/nasa/nasa-featured-collection/nasa-pia12348.webp')
   },
   {
     "id": "PIA18920",
@@ -75,7 +83,8 @@ const NASA_WALLPAPERS = [
     "author": "NASA/JPL-Caltech/UCLA/MPS/DLR/IDA",
     "year": "2015",
     "source": "nasa",
-    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia18920.webp"
+    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia18920.webp",
+    image: require('./images-eink/nasa/nasa-featured-collection/nasa-pia18920.webp')
   },
   {
     "id": "PIA19808",
@@ -83,7 +92,8 @@ const NASA_WALLPAPERS = [
     "author": "NASA/JPL-Caltech/MSSS",
     "year": "2015",
     "source": "nasa",
-    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia19808.webp"
+    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia19808.webp",
+    image: require('./images-eink/nasa/nasa-featured-collection/nasa-pia19808.webp')
   },
   {
     "id": "PIA22946",
@@ -91,7 +101,8 @@ const NASA_WALLPAPERS = [
     "author": "NASA",
     "year": "2019",
     "source": "nasa",
-    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia22946.webp"
+    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia22946.webp",
+    image: require('./images-eink/nasa/nasa-featured-collection/nasa-pia22946.webp')
   }
 ];
 
@@ -100,10 +111,7 @@ const NASA_WALLPAPERS = [
  * @returns {Array<Object>}
  */
 export function loadMetWallpapers() {
-  return MET_WALLPAPERS.map((wallpaper) => ({
-    ...wallpaper,
-    image: require(`./${wallpaper.imagePath}`),
-  }));
+  return MET_WALLPAPERS;
 }
 
 /**
@@ -111,10 +119,7 @@ export function loadMetWallpapers() {
  * @returns {Array<Object>}
  */
 export function loadNasaWallpapers() {
-  return NASA_WALLPAPERS.map((wallpaper) => ({
-    ...wallpaper,
-    image: require(`./${wallpaper.imagePath}`),
-  }));
+  return NASA_WALLPAPERS;
 }
 
 /**
@@ -131,10 +136,5 @@ export function getRandomWallpaper({ category = "met" } = {}) {
   }
   
   const randomIndex = Math.floor(Math.random() * wallpapers.length);
-  const wallpaper = wallpapers[randomIndex];
-  
-  return {
-    ...wallpaper,
-    image: require(`./${wallpaper.imagePath}`),
-  };
+  return wallpapers[randomIndex];
 }

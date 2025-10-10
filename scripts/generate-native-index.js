@@ -92,23 +92,37 @@ async function generateNativeIndex() {
     });
   }
 
+  // React Native용 정적 require를 포함한 배열 생성
+  const metWallpapersWithImages = metData.map((wallpaper) => ({
+    ...wallpaper,
+    image: `require('./${wallpaper.imagePath}')`
+  }));
+  
+  const nasaWallpapersWithImages = nasaData.map((wallpaper) => ({
+    ...wallpaper,
+    image: `require('./${wallpaper.imagePath}')`
+  }));
+
+  // 객체를 문자열로 변환하면서 require를 코드로 처리
+  const stringifyWithRequire = (arr) => {
+    return JSON.stringify(arr, null, 2)
+      .replace(/"image": "require\('(.+?)'\)"/g, 'image: require(\'$1\')');
+  };
+
   // React Native용 index 파일 생성
   const code = `// Auto-generated file for React Native compatibility
 // Run 'npm run generate:index' to regenerate
 
-const MET_WALLPAPERS = ${JSON.stringify(metData, null, 2)};
+const MET_WALLPAPERS = ${stringifyWithRequire(metWallpapersWithImages)};
 
-const NASA_WALLPAPERS = ${JSON.stringify(nasaData, null, 2)};
+const NASA_WALLPAPERS = ${stringifyWithRequire(nasaWallpapersWithImages)};
 
 /**
  * Met 카테고리의 모든 wallpaper를 반환한다.
  * @returns {Array<Object>}
  */
 export function loadMetWallpapers() {
-  return MET_WALLPAPERS.map((wallpaper) => ({
-    ...wallpaper,
-    image: require(\`./$\{wallpaper.imagePath}\`),
-  }));
+  return MET_WALLPAPERS;
 }
 
 /**
@@ -116,10 +130,7 @@ export function loadMetWallpapers() {
  * @returns {Array<Object>}
  */
 export function loadNasaWallpapers() {
-  return NASA_WALLPAPERS.map((wallpaper) => ({
-    ...wallpaper,
-    image: require(\`./$\{wallpaper.imagePath}\`),
-  }));
+  return NASA_WALLPAPERS;
 }
 
 /**
@@ -136,12 +147,7 @@ export function getRandomWallpaper({ category = "met" } = {}) {
   }
   
   const randomIndex = Math.floor(Math.random() * wallpapers.length);
-  const wallpaper = wallpapers[randomIndex];
-  
-  return {
-    ...wallpaper,
-    image: require(\`./$\{wallpaper.imagePath}\`),
-  };
+  return wallpapers[randomIndex];
 }
 `;
 

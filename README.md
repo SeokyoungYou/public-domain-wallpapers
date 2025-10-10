@@ -50,10 +50,11 @@ Both helpers return an array of `{ id, title, author, description, year, license
 
 ### 2. React Native
 
-React Native automatically uses `index.native.js` which includes all metadata pre-bundled. No file system access needed!
+React Native는 Metro bundler의 동적 require 제한으로 인해, 모든 이미지를 정적으로 import합니다. 패키지는 이미 최적화되어 있어 즉시 사용 가능합니다.
 
 ```tsx
 import { loadMetWallpapers, loadNasaWallpapers, getRandomWallpaper } from "public-domain-wallpapers";
+import { Image, StyleSheet, View } from "react-native";
 
 // Load all Met wallpapers
 const metWallpapers = loadMetWallpapers();
@@ -67,7 +68,9 @@ const randomWallpaper = getRandomWallpaper({ category: "nasa" });
 <Image source={randomWallpaper.image} style={styles.wallpaper} />
 ```
 
-**Note for maintainers**: After fetching new assets, run `npm run generate:native` to rebuild `index.native.js` with the latest metadata.
+모든 이미지는 `index.js`에서 정적으로 require되어 Metro bundler와 완벽하게 호환됩니다.
+
+**패키지 관리자를 위한 참고사항**: 새로운 에셋을 추가한 후에는 `npm run generate:index`를 실행하여 최신 메타데이터로 `index.js`를 재생성해주세요.
 
 ### 3. Serve the optimised images (Node.js/Web only)
 
@@ -113,7 +116,7 @@ This script only re-exports the already-downloaded images, so the npm package st
 
 - `npm run fetch:assets`: Fetches new assets according to `config/*.json`, optimises them, and writes metadata.
 - `npm run optimize:eink`: Creates e-ink/grayscale derivatives with consistent sizing and compression.
-- `npm run generate:native`: Generates `index.native.js` for React Native compatibility.
+- `npm run generate:index`: Generates `index.js` for React Native compatibility.
 - See `docs/QUALITY-GUIDE.md` for asset preparation guidelines.
 
 ## Quality Guidelines
