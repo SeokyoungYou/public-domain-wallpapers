@@ -18,9 +18,11 @@ Only the optimised asset folders listed above are included when you install the 
 
 ## Usage
 
-### 1. Load metadata
+### 1. Node.js / Web
 
-Each wallpaper’s metadata ships as a standalone JSON file. With Node.js 18+ (ES modules) you can import what you need using JSON import assertions:
+#### Load metadata
+
+Each wallpaper's metadata ships as a standalone JSON file. With Node.js 18+ (ES modules) you can import what you need using JSON import assertions:
 
 ```js
 import hokusai from "public-domain-wallpapers/metadata/met/met-featured-collection/met-436839.json" assert { type: "json" };
@@ -34,15 +36,40 @@ If you prefer CommonJS, use `createRequire` to load the same JSON files.
 When you need to enumerate many records at once, the package also ships programmatic helpers that pair each metadata entry with its optimised e-ink image path:
 
 ```js
-import { loadMetWallpapers, loadNasaWallpapers } from "public-domain-wallpapers";
+import { loadMetWallpapers, loadNasaWallpapers, getRandomWallpaper } from "public-domain-wallpapers";
 
 const metWallpapers = await loadMetWallpapers(); // only items that live in metadata/met
 const nasaWallpapers = await loadNasaWallpapers({ includeAbsolutePaths: true });
+
+// Get a random wallpaper
+const randomMet = await getRandomWallpaper(); // defaults to "met"
+const randomNasa = await getRandomWallpaper({ category: "nasa" });
 ```
 
-Both helpers return an array of `{ id, metadata, metadataPath, imagePath }`. When `includeAbsolutePaths` is `true`, additional `metadataFile` and `imageFile` fields are provided so you can copy or post-process assets directly from the package directory. The `imagePath` always points to the optimised WebP file found under `images-eink/`.
+Both helpers return an array of `{ id, title, author, description, year, license, source, image, imagePath, metadataPath, ... }`. When `includeAbsolutePaths` is `true`, additional `metadataFile` and `imageFile` fields are provided so you can copy or post-process assets directly from the package directory. The `imagePath` always points to the optimised WebP file found under `images-eink/`.
 
-### 2. Serve the optimised images
+### 2. React Native
+
+React Native automatically uses `index.native.js` which includes all metadata pre-bundled. No file system access needed!
+
+```tsx
+import { loadMetWallpapers, loadNasaWallpapers, getRandomWallpaper } from "public-domain-wallpapers";
+
+// Load all Met wallpapers
+const metWallpapers = loadMetWallpapers();
+console.log(metWallpapers[0].title); // "The Harvesters"
+
+// Use in Image component
+<Image source={metWallpapers[0].image} style={styles.wallpaper} />
+
+// Get a random wallpaper
+const randomWallpaper = getRandomWallpaper({ category: "nasa" });
+<Image source={randomWallpaper.image} style={styles.wallpaper} />
+```
+
+**Note for maintainers**: After fetching new assets, run `npm run generate:native` to rebuild `index.native.js` with the latest metadata.
+
+### 3. Serve the optimised images (Node.js/Web only)
 
 Published image assets live under `images-eink/` and are already WebP compressed. A simple Node script can copy them into your own static directory:
 
@@ -66,7 +93,7 @@ import hokusaiImageUrl from "public-domain-wallpapers/images-eink/met/met-featur
 document.querySelector("img").src = hokusaiImageUrl;
 ```
 
-### 3. Generate e-ink variants (optional)
+### 4. Generate e-ink variants (optional)
 
 Use the included Sharp-based tooling when you need e-ink/e-paper friendly assets:
 
@@ -86,6 +113,7 @@ This script only re-exports the already-downloaded images, so the npm package st
 
 - `npm run fetch:assets`: Fetches new assets according to `config/*.json`, optimises them, and writes metadata.
 - `npm run optimize:eink`: Creates e-ink/grayscale derivatives with consistent sizing and compression.
+- `npm run generate:native`: Generates `index.native.js` for React Native compatibility.
 - See `docs/QUALITY-GUIDE.md` for asset preparation guidelines.
 
 ## Quality Guidelines
