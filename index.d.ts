@@ -8,6 +8,7 @@ export interface PublicDomainWallpaper {
   author?: string;
   year?: string;
   source: WallpaperSource;
+  collection?: string;
   image: ImageSourcePropType;
   imagePath: string;
 }

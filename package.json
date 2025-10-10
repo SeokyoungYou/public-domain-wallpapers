@@ -1,6 +1,6 @@
 {
   "name": "public-domain-wallpapers",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Public domain and CC0 artwork wallpapers packaged for easy consumption.",
   "main": "index.js",
   "types": "index.d.ts",

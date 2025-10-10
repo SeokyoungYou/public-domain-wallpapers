@@ -66,6 +66,7 @@ async function generateNativeIndex() {
       author: metadata.author,
       year: metadata.year,
       source: "met",
+      collection: metadata.sourceCategory,
       imagePath: `images-eink/${baseName}.webp`,
     });
   }
@@ -88,6 +89,7 @@ async function generateNativeIndex() {
       author: metadata.author,
       year: metadata.year,
       source: "nasa",
+      collection: metadata.sourceCategory,
       imagePath: `images-eink/${baseName}.webp`,
     });
   }
