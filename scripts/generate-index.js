@@ -40,7 +40,7 @@ async function listMetadataFiles(currentDir, relativePrefix = "") {
 
 async function generateNativeIndex() {
   const metadataFiles = await listMetadataFiles(METADATA_DIR);
-
+  
   const metFiles = metadataFiles.filter((f) => f.startsWith("met/"));
   const nasaFiles = metadataFiles.filter((f) => f.startsWith("nasa/"));
 
@@ -156,3 +156,4 @@ generateNativeIndex().catch((error) => {
   console.error("❌ Error generating native index:", error);
   process.exit(1);
 });
+

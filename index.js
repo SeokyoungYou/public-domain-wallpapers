@@ -1,159 +1,140 @@
-import { access, readFile, readdir } from "node:fs/promises";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+// Auto-generated file for React Native compatibility
+// Run 'npm run generate:index' to regenerate
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const MET_WALLPAPERS = [
+  {
+    "id": "435809",
+    "title": "The Harvesters",
+    "author": "Pieter Bruegel the Elder",
+    "year": "1565",
+    "source": "met",
+    "imagePath": "images-eink/met/met-featured-collection/met-435809.webp"
+  },
+  {
+    "id": "436839",
+    "title": "The Penitent Magdalen",
+    "author": "Georges de La Tour",
+    "year": "ca. 1640",
+    "source": "met",
+    "imagePath": "images-eink/met/met-featured-collection/met-436839.webp"
+  },
+  {
+    "id": "436965",
+    "title": "The Monet Family in Their Garden at Argenteuil",
+    "author": "Edouard Manet",
+    "year": "1874",
+    "source": "met",
+    "imagePath": "images-eink/met/met-featured-collection/met-436965.webp"
+  },
+  {
+    "id": "437853",
+    "title": "Venice, from the Porch of Madonna della Salute",
+    "author": "Joseph Mallord William Turner",
+    "year": "ca. 1835",
+    "source": "met",
+    "imagePath": "images-eink/met/met-featured-collection/met-437853.webp"
+  },
+  {
+    "id": "671456",
+    "title": "Chrysanthemums in the Garden at Petit-Gennevilliers",
+    "author": "Gustave Caillebotte",
+    "year": "1893",
+    "source": "met",
+    "imagePath": "images-eink/met/met-featured-collection/met-671456.webp"
+  }
+];
 
-const METADATA_DIR = path.join(__dirname, "metadata");
+const NASA_WALLPAPERS = [
+  {
+    "id": "PIA02652",
+    "title": "Mars Pathfinder Filled",
+    "author": "NASA/JPL",
+    "year": "2000",
+    "source": "nasa",
+    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia02652.webp"
+  },
+  {
+    "id": "PIA04921",
+    "title": "Andromeda Galaxy",
+    "author": "NASA/JPL/California Institute of Technology",
+    "year": "2003",
+    "source": "nasa",
+    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia04921.webp"
+  },
+  {
+    "id": "PIA12348",
+    "title": "Great Observatories Unique Views of the Milky Way",
+    "author": "NASA/JPL-Caltech/ESA/CXC/STScI",
+    "year": "2009",
+    "source": "nasa",
+    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia12348.webp"
+  },
+  {
+    "id": "PIA18920",
+    "title": "Ceres Awaits Dawn",
+    "author": "NASA/JPL-Caltech/UCLA/MPS/DLR/IDA",
+    "year": "2015",
+    "source": "nasa",
+    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia18920.webp"
+  },
+  {
+    "id": "PIA19808",
+    "title": "Looking Up at Mars Rover Curiosity in Buckskin Selfie",
+    "author": "NASA/JPL-Caltech/MSSS",
+    "year": "2015",
+    "source": "nasa",
+    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia19808.webp"
+  },
+  {
+    "id": "PIA22946",
+    "title": "Jupiter Marble",
+    "author": "NASA",
+    "year": "2019",
+    "source": "nasa",
+    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia22946.webp"
+  }
+];
 
 /**
- * Recursively enumerate metadata JSON files relative to the metadata root.
- * Uses POSIX-style separators so the returned paths work as ESM specifiers.
+ * Met 카테고리의 모든 wallpaper를 반환한다.
+ * @returns {Array<Object>}
  */
-async function listMetadataFiles(currentDir, relativePrefix = "") {
-  const entries = await readdir(currentDir, { withFileTypes: true });
-  const files = [];
-
-  for (const entry of entries) {
-    if (entry.name.startsWith("_") || entry.name.startsWith(".")) {
-      continue;
-    }
-
-    if (entry.isDirectory()) {
-      const childPrefix = relativePrefix
-        ? `${relativePrefix}/${entry.name}`
-        : entry.name;
-      const childFiles = await listMetadataFiles(
-        path.join(currentDir, entry.name),
-        childPrefix
-      );
-      files.push(...childFiles);
-      continue;
-    }
-
-    if (entry.isFile() && entry.name.endsWith(".json")) {
-      const relativePath = relativePrefix
-        ? `${relativePrefix}/${entry.name}`
-        : entry.name;
-      files.push(relativePath);
-    }
-  }
-
-  return files;
-}
-
-async function fileExists(filePath) {
-  try {
-    await access(filePath);
-    return true;
-  } catch {
-    return false;
-  }
+export function loadMetWallpapers() {
+  return MET_WALLPAPERS.map((wallpaper) => ({
+    ...wallpaper,
+    image: require(`./${wallpaper.imagePath}`),
+  }));
 }
 
 /**
- * 해당 카테고리의 메타데이터 및 e-ink 이미지 경로를 불러온다.
- * @param {string} category - metadata 루트 하위의 상위 디렉터리 이름 (예: "met").
- * @param {Object} [options]
- * @param {boolean} [options.includeAbsolutePaths=false] - 결과에 절대 경로를 포함할지 여부.
- * @returns {Promise<Array<Object>>}
+ * NASA 카테고리의 모든 wallpaper를 반환한다.
+ * @returns {Array<Object>}
  */
-async function loadCategoryWallpapers(category, options = {}) {
-  const { includeAbsolutePaths = false } = options;
-  if (!(await fileExists(METADATA_DIR))) {
-    return [];
-  }
-
-  const metadataFiles = await listMetadataFiles(METADATA_DIR);
-  const filtered = metadataFiles.filter((relativePath) =>
-    relativePath.startsWith(`${category}/`)
-  );
-  const imageRoot = "images-eink";
-  const imageBaseDir = path.join(__dirname, imageRoot);
-
-  const wallpapers = [];
-
-  for (const metadataRelative of filtered) {
-    const metadataSegments = metadataRelative.split("/");
-    const metadataAbsolute = path.join(METADATA_DIR, ...metadataSegments);
-    const raw = await readFile(metadataAbsolute, "utf8");
-    const metadata = JSON.parse(raw);
-
-    const relativeDirSegments = metadataSegments.slice(0, -1);
-    const stem = metadataSegments[metadataSegments.length - 1].slice(
-      0,
-      -".json".length
-    );
-
-    const baseName =
-      relativeDirSegments.length > 0
-        ? `${relativeDirSegments.join("/")}/${stem}`
-        : stem;
-
-    const imageRelative = `${imageRoot}/${baseName}.webp`;
-    const imageAbsolute = path.join(
-      imageBaseDir,
-      ...relativeDirSegments,
-      `${stem}.webp`
-    );
-    const hasImage = await fileExists(imageAbsolute);
-
-    const entry = {
-      id: metadata.id ?? stem,
-      title: metadata.title,
-      author: metadata.author,
-      description: metadata.description,
-      year: metadata.year,
-      license: metadata.license,
-      originalImageUrl: metadata.originalImageUrl,
-      sourcePage: metadata.sourcePage,
-      fetchedFrom: metadata.fetchedFrom,
-      categoryLabel: metadata.categoryLabel,
-      source: category,
-      image: hasImage ? imageAbsolute : null,
-      imagePath: hasImage ? imageRelative : null,
-      metadataPath: `metadata/${metadataRelative}`,
-    };
-
-    if (includeAbsolutePaths) {
-      entry.metadataFile = metadataAbsolute;
-      entry.imageFile = hasImage ? imageAbsolute : null;
-    }
-
-    wallpapers.push(entry);
-  }
-
-  return wallpapers;
-}
-
-export async function loadMetWallpapers(options = {}) {
-  return loadCategoryWallpapers("met", options);
-}
-
-export async function loadNasaWallpapers(options = {}) {
-  return loadCategoryWallpapers("nasa", options);
+export function loadNasaWallpapers() {
+  return NASA_WALLPAPERS.map((wallpaper) => ({
+    ...wallpaper,
+    image: require(`./${wallpaper.imagePath}`),
+  }));
 }
 
 /**
  * 특정 카테고리에서 랜덤으로 하나의 wallpaper를 반환한다.
  * @param {Object} [options]
  * @param {"met" | "nasa"} [options.category="met"] - 카테고리 이름 (기본값: "met")
- * @param {boolean} [options.includeAbsolutePaths=false] - 결과에 절대 경로를 포함할지 여부.
- * @returns {Promise<Object|null>}
+ * @returns {Object|null}
  */
-export async function getRandomWallpaper({
-  category = "met",
-  includeAbsolutePaths = false,
-} = {}) {
-  const wallpapers = await loadCategoryWallpapers(category, {
-    includeAbsolutePaths,
-  });
-
+export function getRandomWallpaper({ category = "met" } = {}) {
+  const wallpapers = category === "nasa" ? NASA_WALLPAPERS : MET_WALLPAPERS;
+  
   if (wallpapers.length === 0) {
     return null;
   }
-
+  
   const randomIndex = Math.floor(Math.random() * wallpapers.length);
-  return wallpapers[randomIndex];
+  const wallpaper = wallpapers[randomIndex];
+  
+  return {
+    ...wallpaper,
+    image: require(`./${wallpaper.imagePath}`),
+  };
 }

@@ -1,17 +1,14 @@
 {
   "name": "public-domain-wallpapers",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Public domain and CC0 artwork wallpapers packaged for easy consumption.",
   "type": "module",
   "main": "index.js",
-  "react-native": "index.native.js",
   "types": "index.d.ts",
   "files": [
     "index.js",
-    "index.native.js",
     "index.d.ts",
     "images-eink/**/*.webp",
-    "metadata/**/*",
     "README.md",
     "LICENSE"
   ],
@@ -19,7 +16,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "fetch:assets": "node scripts/fetch-assets.js",
     "optimize:eink": "node scripts/optimize-eink-images.js",
-    "generate:native": "node scripts/generate-native-index.js"
+    "generate:index": "node scripts/generate-index.js"
   },
   "keywords": [
     "wallpaper",
