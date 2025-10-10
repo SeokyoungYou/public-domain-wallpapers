@@ -23,6 +23,11 @@ export interface LoadWallpapersOptions {
   includeAbsolutePaths?: boolean;
 }
 
+export interface GetRandomWallpaperOptions {
+  category?: WallpaperSource;
+  includeAbsolutePaths?: boolean;
+}
+
 export interface PublicDomainWallpaperWithAbsolutePaths
   extends PublicDomainWallpaper {
   metadataFile: string;
@@ -42,3 +47,10 @@ export function loadNasaWallpapers(
 export function loadNasaWallpapers(
   options: LoadWallpapersOptions & { includeAbsolutePaths: true }
 ): Promise<PublicDomainWallpaperWithAbsolutePaths[]>;
+
+export function getRandomWallpaper(
+  options?: GetRandomWallpaperOptions & { includeAbsolutePaths?: false }
+): Promise<PublicDomainWallpaper | null>;
+export function getRandomWallpaper(
+  options: GetRandomWallpaperOptions & { includeAbsolutePaths: true }
+): Promise<PublicDomainWallpaperWithAbsolutePaths | null>;

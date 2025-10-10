@@ -134,3 +134,26 @@ export async function loadMetWallpapers(options = {}) {
 export async function loadNasaWallpapers(options = {}) {
   return loadCategoryWallpapers("nasa", options);
 }
+
+/**
+ * 특정 카테고리에서 랜덤으로 하나의 wallpaper를 반환한다.
+ * @param {Object} [options]
+ * @param {"met" | "nasa"} [options.category="met"] - 카테고리 이름 (기본값: "met")
+ * @param {boolean} [options.includeAbsolutePaths=false] - 결과에 절대 경로를 포함할지 여부.
+ * @returns {Promise<Object|null>}
+ */
+export async function getRandomWallpaper({
+  category = "met",
+  includeAbsolutePaths = false,
+} = {}) {
+  const wallpapers = await loadCategoryWallpapers(category, {
+    includeAbsolutePaths,
+  });
+
+  if (wallpapers.length === 0) {
+    return null;
+  }
+
+  const randomIndex = Math.floor(Math.random() * wallpapers.length);
+  return wallpapers[randomIndex];
+}
