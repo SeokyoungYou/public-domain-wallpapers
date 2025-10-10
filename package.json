@@ -1,11 +1,13 @@
 {
   "name": "public-domain-wallpapers",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Public domain and CC0 artwork wallpapers packaged for easy consumption.",
   "type": "module",
   "main": "index.js",
+  "types": "index.d.ts",
   "files": [
     "index.js",
+    "index.d.ts",
     "images-eink/**/*.webp",
     "metadata/**/*",
     "README.md",

@@ -21,14 +21,21 @@ async function listMetadataFiles(currentDir, relativePrefix = "") {
     }
 
     if (entry.isDirectory()) {
-      const childPrefix = relativePrefix ? `${relativePrefix}/${entry.name}` : entry.name;
-      const childFiles = await listMetadataFiles(path.join(currentDir, entry.name), childPrefix);
+      const childPrefix = relativePrefix
+        ? `${relativePrefix}/${entry.name}`
+        : entry.name;
+      const childFiles = await listMetadataFiles(
+        path.join(currentDir, entry.name),
+        childPrefix
+      );
       files.push(...childFiles);
       continue;
     }
 
     if (entry.isFile() && entry.name.endsWith(".json")) {
-      const relativePath = relativePrefix ? `${relativePrefix}/${entry.name}` : entry.name;
+      const relativePath = relativePrefix
+        ? `${relativePrefix}/${entry.name}`
+        : entry.name;
       files.push(relativePath);
     }
   }
@@ -59,7 +66,9 @@ async function loadCategoryWallpapers(category, options = {}) {
   }
 
   const metadataFiles = await listMetadataFiles(METADATA_DIR);
-  const filtered = metadataFiles.filter((relativePath) => relativePath.startsWith(`${category}/`));
+  const filtered = metadataFiles.filter((relativePath) =>
+    relativePath.startsWith(`${category}/`)
+  );
   const imageRoot = "images-eink";
   const imageBaseDir = path.join(__dirname, imageRoot);
 
@@ -72,27 +81,40 @@ async function loadCategoryWallpapers(category, options = {}) {
     const metadata = JSON.parse(raw);
 
     const relativeDirSegments = metadataSegments.slice(0, -1);
-    const stem = metadataSegments[metadataSegments.length - 1].slice(0, -".json".length);
+    const stem = metadataSegments[metadataSegments.length - 1].slice(
+      0,
+      -".json".length
+    );
 
-    const baseName = relativeDirSegments.length > 0
-      ? `${relativeDirSegments.join("/")}/${stem}`
-      : stem;
+    const baseName =
+      relativeDirSegments.length > 0
+        ? `${relativeDirSegments.join("/")}/${stem}`
+        : stem;
 
     const imageRelative = `${imageRoot}/${baseName}.webp`;
     const imageAbsolute = path.join(
       imageBaseDir,
       ...relativeDirSegments,
-      `${stem}.webp`,
+      `${stem}.webp`
     );
     const hasImage = await fileExists(imageAbsolute);
 
     const entry = {
       id: metadata.id ?? stem,
-      metadata,
+      title: metadata.title,
+      author: metadata.author,
+      description: metadata.description,
+      year: metadata.year,
+      license: metadata.license,
+      originalImageUrl: metadata.originalImageUrl,
+      sourcePage: metadata.sourcePage,
+      fetchedFrom: metadata.fetchedFrom,
+      categoryLabel: metadata.categoryLabel,
+      source: category,
+      image: hasImage ? imageAbsolute : null,
+      imagePath: hasImage ? imageRelative : null,
       metadataPath: `metadata/${metadataRelative}`,
     };
-
-    entry.imagePath = hasImage ? imageRelative : null;
 
     if (includeAbsolutePaths) {
       entry.metadataFile = metadataAbsolute;
