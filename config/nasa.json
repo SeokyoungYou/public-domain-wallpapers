@@ -4,20 +4,14 @@
       "id": "nasa-featured-collection",
       "name": "Featured Collection",
       "nasaIds": [
-        "PIA12348",
-        "PIA26966",
-        "PIA22946",
         "PIA02652",
         "PIA04921",
+        "PIA12348",
         "PIA18920",
-        "ISS043-E-93880",
-        "ISS047-E-33526",
-        "ISS048-E-100172",
-        "ISS057-E-066995",
-        "ISS065-E-017382",
-        "PIA19808"
+        "PIA19808",
+        "PIA22946"
       ],
-      "limit": 12
+      "limit": 6
     }
   ]
 }
