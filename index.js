@@ -434,6 +434,11 @@ export const WALLPAPER_SOURCES = {
     id: "met",
     name: "The Met Museum",
     collections: {
+      "all-met": {
+        "id": "all-met",
+        "name": "All Met Collection",
+        wallpapers: ALL_MET_WALLPAPERS
+      },
       "met-floral-collection": {
         "id": "met-floral-collection",
         "name": "Floral & Botanical Collection",
@@ -453,11 +458,6 @@ export const WALLPAPER_SOURCES = {
         "id": "met-seascape-collection",
         "name": "Seascape Collection",
         wallpapers: MET_SEASCAPE_COLLECTION_WALLPAPERS
-      },
-      "all-met": {
-        "id": "all-met",
-        "name": "All Met Collection",
-        wallpapers: ALL_MET_WALLPAPERS
       }
     },
   },
@@ -465,15 +465,15 @@ export const WALLPAPER_SOURCES = {
     id: "nasa",
     name: "NASA",
     collections: {
-      "nasa-featured-collection": {
-        "id": "nasa-featured-collection",
-        "name": "Featured Collection",
-        wallpapers: NASA_FEATURED_COLLECTION_WALLPAPERS
-      },
       "all-nasa": {
         "id": "all-nasa",
         "name": "All NASA Collection",
         wallpapers: ALL_NASA_WALLPAPERS
+      },
+      "nasa-featured-collection": {
+        "id": "nasa-featured-collection",
+        "name": "Featured Collection",
+        wallpapers: NASA_FEATURED_COLLECTION_WALLPAPERS
       }
     },
   },
@@ -509,13 +509,21 @@ export function getAllCollections() {
 }
 
 /**
- * 특정 소스의 모든 컬렉션을 반환한다.
+ * 특정 소스의 모든 컬렉션을 반환한다. (all 컬렉션은 항상 맨 처음)
  * @param {"met" | "nasa"} sourceId - 소스 ID
  * @returns {WallpaperCollection[]}
  */
 export function getCollections(sourceId) {
   const source = WALLPAPER_SOURCES[sourceId];
-  return source ? Object.values(source.collections) : [];
+  if (!source) return [];
+  
+  const collections = Object.values(source.collections);
+  // all 컬렉션을 맨 앞으로 정렬
+  return collections.sort((a, b) => {
+    if (a.id.startsWith('all-')) return -1;
+    if (b.id.startsWith('all-')) return 1;
+    return 0;
+  });
 }
 
 /**

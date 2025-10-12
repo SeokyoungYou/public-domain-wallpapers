@@ -180,16 +180,20 @@ async function generateNativeIndex() {
     nasaCollectionsWithImages
   );
 
-  // 컬렉션 객체를 상수 참조로 생성
+  // 컬렉션 객체를 상수 참조로 생성 (all 제외)
   const generateCollectionsWithRefs = (collections) => {
-    const entries = Object.entries(collections).map(([id, collection]) => {
-      const constantName = id.toUpperCase().replace(/-/g, "_") + "_WALLPAPERS";
-      return `  "${id}": {
+    // all 컬렉션은 제외 (나중에 명시적으로 마지막에 추가됨)
+    const entries = Object.entries(collections)
+      .filter(([id]) => !id.startsWith("all-"))
+      .map(([id, collection]) => {
+        const constantName =
+          id.toUpperCase().replace(/-/g, "_") + "_WALLPAPERS";
+        return `  "${id}": {
     "id": "${id}",
     "name": "${collection.name}",
     wallpapers: ${constantName}
   }`;
-    });
+      });
     return `{\n${entries.join(",\n")}\n}`;
   };
 
@@ -227,11 +231,11 @@ async function generateNativeIndex() {
     collections: nasaCollectionsWithImages,
   });
 
-  // 컬렉션 문자열 생성 (all 컬렉션 포함)
+  // 컬렉션 문자열 생성 (all 컬렉션을 가장 처음에 포함)
   const generateCollectionsStrWithAll = ({ collections, allCollection }) => {
     const baseCollections = generateCollectionsWithRefs(collections);
-    // 마지막 } 제거하고 all 컬렉션 추가
-    return baseCollections.slice(0, -2) + `,\n${allCollection.collection}\n}`;
+    // 첫번째 { 다음에 all 컬렉션 추가
+    return baseCollections.replace(/^\{/, `{\n${allCollection.collection},`);
   };
 
   const metCollectionsStr = generateCollectionsStrWithAll({
@@ -331,13 +335,21 @@ export function getAllCollections() {
 }
 
 /**
- * 특정 소스의 모든 컬렉션을 반환한다.
+ * 특정 소스의 모든 컬렉션을 반환한다. (all 컬렉션은 항상 맨 처음)
  * @param {"met" | "nasa"} sourceId - 소스 ID
  * @returns {WallpaperCollection[]}
  */
 export function getCollections(sourceId) {
   const source = WALLPAPER_SOURCES[sourceId];
-  return source ? Object.values(source.collections) : [];
+  if (!source) return [];
+  
+  const collections = Object.values(source.collections);
+  // all 컬렉션을 맨 앞으로 정렬
+  return collections.sort((a, b) => {
+    if (a.id.startsWith('all-')) return -1;
+    if (b.id.startsWith('all-')) return 1;
+    return 0;
+  });
 }
 
 /**
