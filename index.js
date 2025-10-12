@@ -358,16 +358,16 @@ const ALL_MET_WALLPAPERS = [
 ];
 
 // NASA Wallpapers
-const NASA_FEATURED_COLLECTION_WALLPAPERS = [
+const NASA_DEEP_SPACE_COLLECTION_WALLPAPERS = [
   {
-    "id": "PIA02652",
-    "title": "Mars Pathfinder Filled",
-    "author": "NASA/JPL",
-    "year": "2000",
+    "id": "PIA03678",
+    "title": "The Mark of a Dying Star",
+    "author": "NASA/JPL-Caltech/ESA",
+    "year": "2006",
     "source": "nasa",
-    "collection": "nasa-featured-collection",
-    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia02652.webp",
-    image: require('./images-eink/nasa/nasa-featured-collection/nasa-pia02652.webp')
+    "collection": "nasa-deep-space-collection",
+    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-pia03678.webp",
+    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-pia03678.webp')
   },
   {
     "id": "PIA04921",
@@ -375,39 +375,182 @@ const NASA_FEATURED_COLLECTION_WALLPAPERS = [
     "author": "NASA/JPL/California Institute of Technology",
     "year": "2003",
     "source": "nasa",
-    "collection": "nasa-featured-collection",
-    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia04921.webp",
-    image: require('./images-eink/nasa/nasa-featured-collection/nasa-pia04921.webp')
+    "collection": "nasa-deep-space-collection",
+    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-pia04921.webp",
+    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-pia04921.webp')
   },
   {
-    "id": "PIA12348",
-    "title": "Great Observatories Unique Views of the Milky Way",
-    "author": "NASA/JPL-Caltech/ESA/CXC/STScI",
-    "year": "2009",
+    "id": "PIA05062",
+    "title": "The Tarantula Nebula",
+    "author": "NASA/JPL-Caltech/Cornell University and University of Leiden",
+    "year": "2004",
     "source": "nasa",
-    "collection": "nasa-featured-collection",
-    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia12348.webp",
-    image: require('./images-eink/nasa/nasa-featured-collection/nasa-pia12348.webp')
+    "collection": "nasa-deep-space-collection",
+    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-pia05062.webp",
+    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-pia05062.webp')
   },
   {
-    "id": "PIA18920",
-    "title": "Ceres Awaits Dawn",
-    "author": "NASA/JPL-Caltech/UCLA/MPS/DLR/IDA",
+    "id": "PIA13028",
+    "title": "Big Babies in the Rosette Nebula",
+    "author": "ESA and the PACS, SPIRE & HSC consortia, F. Motte AIM Saclay,CEA/IRFU - CNRS/INSU - U.ParisDidedrot for the HOBYS key programme",
+    "year": "2010",
+    "source": "nasa",
+    "collection": "nasa-deep-space-collection",
+    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-pia13028.webp",
+    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-pia13028.webp')
+  },
+  {
+    "id": "PIA13108",
+    "title": "Menkhib and the California Nebula",
+    "author": "NASA/JPL-Caltech/UCLA",
+    "year": "2010",
+    "source": "nasa",
+    "collection": "nasa-deep-space-collection",
+    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-pia13108.webp",
+    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-pia13108.webp')
+  },
+  {
+    "id": "PIA14091",
+    "title": "The van Gogh of the Infrared Sky",
+    "author": "NASA/JPL-Caltech/UCLA",
+    "year": "2011",
+    "source": "nasa",
+    "collection": "nasa-deep-space-collection",
+    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-pia14091.webp",
+    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-pia14091.webp')
+  },
+  {
+    "id": "PIA17553",
+    "title": "Witch Head Brews Baby Stars",
+    "author": "NASA/JPL-Caltech",
+    "year": "2013",
+    "source": "nasa",
+    "collection": "nasa-deep-space-collection",
+    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-pia17553.webp",
+    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-pia17553.webp')
+  },
+  {
+    "id": "PIA22568",
+    "title": "Cat's Paw Image 1",
+    "author": "NASA/JPL-Caltech",
+    "year": "2018",
+    "source": "nasa",
+    "collection": "nasa-deep-space-collection",
+    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-pia22568.webp",
+    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-pia22568.webp')
+  },
+  {
+    "id": "PIA23646",
+    "title": "Tarantula Nebula Spitzer 2-Color Image",
+    "author": "NASA/JPL-Caltech",
+    "year": "2020",
+    "source": "nasa",
+    "collection": "nasa-deep-space-collection",
+    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-pia23646.webp",
+    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-pia23646.webp')
+  }
+];
+
+const NASA_SOLAR_SYSTEM_COLLECTION_WALLPAPERS = [
+  {
+    "id": "PIA00342",
+    "title": "The Earth & Moon",
+    "author": "NASA/JPL/USGS",
+    "year": "1998",
+    "source": "nasa",
+    "collection": "nasa-solar-system-collection",
+    "imagePath": "images-eink/nasa/nasa-solar-system-collection/nasa-pia00342.webp",
+    image: require('./images-eink/nasa/nasa-solar-system-collection/nasa-pia00342.webp')
+  },
+  {
+    "id": "PIA02219",
+    "title": "Neptune",
+    "author": "NASA/JPL",
+    "year": "1999",
+    "source": "nasa",
+    "collection": "nasa-solar-system-collection",
+    "imagePath": "images-eink/nasa/nasa-solar-system-collection/nasa-pia02219.webp",
+    image: require('./images-eink/nasa/nasa-solar-system-collection/nasa-pia02219.webp')
+  },
+  {
+    "id": "PIA03149",
+    "title": "Handle-shaped Prominence",
+    "author": "ESA/NASA/SOHO",
+    "year": "2001",
+    "source": "nasa",
+    "collection": "nasa-solar-system-collection",
+    "imagePath": "images-eink/nasa/nasa-solar-system-collection/nasa-pia03149.webp",
+    image: require('./images-eink/nasa/nasa-solar-system-collection/nasa-pia03149.webp')
+  },
+  {
+    "id": "PIA04866",
+    "title": "Cassini Jupiter Portrait",
+    "author": "NASA/JPL/Space Science Institute",
+    "year": "2003",
+    "source": "nasa",
+    "collection": "nasa-solar-system-collection",
+    "imagePath": "images-eink/nasa/nasa-solar-system-collection/nasa-pia04866.webp",
+    image: require('./images-eink/nasa/nasa-solar-system-collection/nasa-pia04866.webp')
+  },
+  {
+    "id": "PIA08329",
+    "title": "In Saturn Shadow",
+    "author": "NASA/JPL/Space Science Institute",
+    "year": "2006",
+    "source": "nasa",
+    "collection": "nasa-solar-system-collection",
+    "imagePath": "images-eink/nasa/nasa-solar-system-collection/nasa-pia08329.webp",
+    image: require('./images-eink/nasa/nasa-solar-system-collection/nasa-pia08329.webp')
+  },
+  {
+    "id": "PIA12567",
+    "title": "Planet Six",
+    "author": "NASA/JPL-Caltech/Space Science Institute",
+    "year": "2018",
+    "source": "nasa",
+    "collection": "nasa-solar-system-collection",
+    "imagePath": "images-eink/nasa/nasa-solar-system-collection/nasa-pia12567.webp",
+    image: require('./images-eink/nasa/nasa-solar-system-collection/nasa-pia12567.webp')
+  },
+  {
+    "id": "PIA12713",
+    "title": "High-Phase Plumes",
+    "author": "NASA/JPL/Space Science Institute",
+    "year": "2010",
+    "source": "nasa",
+    "collection": "nasa-solar-system-collection",
+    "imagePath": "images-eink/nasa/nasa-solar-system-collection/nasa-pia12713.webp",
+    image: require('./images-eink/nasa/nasa-solar-system-collection/nasa-pia12713.webp')
+  },
+  {
+    "id": "PIA18033",
+    "title": "Earth",
+    "author": "NASA",
+    "year": "2012",
+    "source": "nasa",
+    "collection": "nasa-solar-system-collection",
+    "imagePath": "images-eink/nasa/nasa-solar-system-collection/nasa-pia18033.webp",
+    image: require('./images-eink/nasa/nasa-solar-system-collection/nasa-pia18033.webp')
+  },
+  {
+    "id": "PIA20016",
+    "title": "Peering Through Titan Haze",
+    "author": "NASA/JPL/University of Arizona/University of Idaho",
     "year": "2015",
     "source": "nasa",
-    "collection": "nasa-featured-collection",
-    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia18920.webp",
-    image: require('./images-eink/nasa/nasa-featured-collection/nasa-pia18920.webp')
+    "collection": "nasa-solar-system-collection",
+    "imagePath": "images-eink/nasa/nasa-solar-system-collection/nasa-pia20016.webp",
+    image: require('./images-eink/nasa/nasa-solar-system-collection/nasa-pia20016.webp')
   },
   {
-    "id": "PIA19808",
-    "title": "Looking Up at Mars Rover Curiosity in Buckskin Selfie",
-    "author": "NASA/JPL-Caltech/MSSS",
-    "year": "2015",
+    "id": "PIA21046",
+    "title": "Saturn, Approaching Northern Summer",
+    "author": "NASA/JPL-Caltech/Space Science Institute",
+    "year": "2016",
     "source": "nasa",
-    "collection": "nasa-featured-collection",
-    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia19808.webp",
-    image: require('./images-eink/nasa/nasa-featured-collection/nasa-pia19808.webp')
+    "collection": "nasa-solar-system-collection",
+    "imagePath": "images-eink/nasa/nasa-solar-system-collection/nasa-pia21046.webp",
+    image: require('./images-eink/nasa/nasa-solar-system-collection/nasa-pia21046.webp')
   },
   {
     "id": "PIA22946",
@@ -415,14 +558,15 @@ const NASA_FEATURED_COLLECTION_WALLPAPERS = [
     "author": "NASA",
     "year": "2019",
     "source": "nasa",
-    "collection": "nasa-featured-collection",
-    "imagePath": "images-eink/nasa/nasa-featured-collection/nasa-pia22946.webp",
-    image: require('./images-eink/nasa/nasa-featured-collection/nasa-pia22946.webp')
+    "collection": "nasa-solar-system-collection",
+    "imagePath": "images-eink/nasa/nasa-solar-system-collection/nasa-pia22946.webp",
+    image: require('./images-eink/nasa/nasa-solar-system-collection/nasa-pia22946.webp')
   }
 ];
 
 const ALL_NASA_WALLPAPERS = [
-  ...NASA_FEATURED_COLLECTION_WALLPAPERS
+  ...NASA_DEEP_SPACE_COLLECTION_WALLPAPERS,
+  ...NASA_SOLAR_SYSTEM_COLLECTION_WALLPAPERS
 ];
 
 /**
@@ -470,10 +614,15 @@ export const WALLPAPER_SOURCES = {
         "name": "All NASA Collection",
         wallpapers: ALL_NASA_WALLPAPERS
       },
-      "nasa-featured-collection": {
-        "id": "nasa-featured-collection",
-        "name": "Featured Collection",
-        wallpapers: NASA_FEATURED_COLLECTION_WALLPAPERS
+      "nasa-deep-space-collection": {
+        "id": "nasa-deep-space-collection",
+        "name": "Deep Space",
+        wallpapers: NASA_DEEP_SPACE_COLLECTION_WALLPAPERS
+      },
+      "nasa-solar-system-collection": {
+        "id": "nasa-solar-system-collection",
+        "name": "Solar System",
+        wallpapers: NASA_SOLAR_SYSTEM_COLLECTION_WALLPAPERS
       }
     },
   },

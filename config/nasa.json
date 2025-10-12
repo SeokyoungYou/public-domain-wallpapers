@@ -1,17 +1,38 @@
 {
   "categories": [
     {
-      "id": "nasa-featured-collection",
-      "name": "Featured Collection",
+      "id": "nasa-deep-space-collection",
+      "name": "Deep Space",
       "nasaIds": [
-        "PIA02652",
-        "PIA04921",
-        "PIA12348",
-        "PIA18920",
-        "PIA19808",
-        "PIA22946"
+        "PIA13028",
+        "PIA13108",
+        "PIA22568",
+        "PIA05062",
+        "PIA03678",
+        "PIA17553",
+        "PIA14091",
+        "PIA23646",
+        "PIA04921"
       ],
-      "limit": 6
+      "limit": 9
+    },
+    {
+      "id": "nasa-solar-system-collection",
+      "name": "Solar System",
+      "nasaIds": [
+        "PIA18033",
+        "PIA21046",
+        "PIA02219",
+        "PIA00342",
+        "PIA04866",
+        "PIA22946",
+        "PIA20016",
+        "PIA12567",
+        "PIA12713",
+        "PIA08329",
+        "PIA03149"
+      ],
+      "limit": 11
     }
   ]
 }
