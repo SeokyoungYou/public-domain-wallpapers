@@ -160,6 +160,90 @@ async function generateNativeIndex() {
     0
   );
 
+  // 각 컬렉션별 wallpaper 상수 생성
+  const generateWallpaperConstants = (collections) => {
+    return Object.entries(collections)
+      .map(([id, collection]) => {
+        const constantName =
+          id.toUpperCase().replace(/-/g, "_") + "_WALLPAPERS";
+        return `const ${constantName} = ${stringifyWithRequire(
+          collection.wallpapers
+        )};`;
+      })
+      .join("\n\n");
+  };
+
+  const metWallpaperConstants = generateWallpaperConstants(
+    metCollectionsWithImages
+  );
+  const nasaWallpaperConstants = generateWallpaperConstants(
+    nasaCollectionsWithImages
+  );
+
+  // 컬렉션 객체를 상수 참조로 생성
+  const generateCollectionsWithRefs = (collections) => {
+    const entries = Object.entries(collections).map(([id, collection]) => {
+      const constantName = id.toUpperCase().replace(/-/g, "_") + "_WALLPAPERS";
+      return `  "${id}": {
+    "id": "${id}",
+    "name": "${collection.name}",
+    wallpapers: ${constantName}
+  }`;
+    });
+    return `{\n${entries.join(",\n")}\n}`;
+  };
+
+  // all 컬렉션 생성
+  const generateAllCollection = ({ sourceId, sourceName, collections }) => {
+    const collectionIds = Object.keys(collections);
+    const constantNames = collectionIds.map(
+      (id) => id.toUpperCase().replace(/-/g, "_") + "_WALLPAPERS"
+    );
+    const allId = `all-${sourceId}`;
+    const allConstantName =
+      allId.toUpperCase().replace(/-/g, "_") + "_WALLPAPERS";
+
+    return {
+      constant: `const ${allConstantName} = [\n  ${constantNames
+        .map((name) => `...${name}`)
+        .join(",\n  ")}\n];`,
+      collection: `  "${allId}": {
+    "id": "${allId}",
+    "name": "All ${sourceName} Collection",
+    wallpapers: ${allConstantName}
+  }`,
+    };
+  };
+
+  const metAllCollection = generateAllCollection({
+    sourceId: "met",
+    sourceName: "Met",
+    collections: metCollectionsWithImages,
+  });
+
+  const nasaAllCollection = generateAllCollection({
+    sourceId: "nasa",
+    sourceName: "NASA",
+    collections: nasaCollectionsWithImages,
+  });
+
+  // 컬렉션 문자열 생성 (all 컬렉션 포함)
+  const generateCollectionsStrWithAll = ({ collections, allCollection }) => {
+    const baseCollections = generateCollectionsWithRefs(collections);
+    // 마지막 } 제거하고 all 컬렉션 추가
+    return baseCollections.slice(0, -2) + `,\n${allCollection.collection}\n}`;
+  };
+
+  const metCollectionsStr = generateCollectionsStrWithAll({
+    collections: metCollectionsWithImages,
+    allCollection: metAllCollection,
+  });
+
+  const nasaCollectionsStr = generateCollectionsStrWithAll({
+    collections: nasaCollectionsWithImages,
+    allCollection: nasaAllCollection,
+  });
+
   // React Native용 index 파일 생성
   const code = `// Auto-generated file for React Native compatibility
 // Run 'npm run generate:index' to regenerate
@@ -190,6 +274,16 @@ async function generateNativeIndex() {
  * @property {Record<string, WallpaperCollection>} collections - 컬렉션 맵
  */
 
+// Met Museum Wallpapers
+${metWallpaperConstants}
+
+${metAllCollection.constant}
+
+// NASA Wallpapers
+${nasaWallpaperConstants}
+
+${nasaAllCollection.constant}
+
 /**
  * 모든 wallpaper 소스 (단일 source of truth)
  * @type {Record<string, WallpaperSource>}
@@ -198,12 +292,12 @@ export const WALLPAPER_SOURCES = {
   met: {
     id: "met",
     name: "The Met Museum",
-    collections: ${stringifyWithRequire(metCollectionsWithImages)},
+    collections: ${metCollectionsStr.replace(/\n/g, "\n    ")},
   },
   nasa: {
     id: "nasa",
     name: "NASA",
-    collections: ${stringifyWithRequire(nasaCollectionsWithImages)},
+    collections: ${nasaCollectionsStr.replace(/\n/g, "\n    ")},
   },
 };
 
@@ -335,12 +429,15 @@ export function getRandomWallpaper({ collectionId, sourceId } = {}) {
   console.log(
     `   - Met: ${
       Object.keys(metCollections).length
-    } collections, ${metTotal} wallpapers`
+    } collections + 1 all collection (total ${metTotal} wallpapers)`
   );
   console.log(
     `   - NASA: ${
       Object.keys(nasaCollections).length
-    } collections, ${nasaTotal} wallpapers`
+    } collections + 1 all collection (total ${nasaTotal} wallpapers)`
+  );
+  console.log(
+    `   💡 Each wallpaper is stored once and referenced by collections`
   );
 }
 
