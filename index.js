@@ -127,16 +127,6 @@ export const WALLPAPER_SOURCES = {
     "name": "Impressionism Collection",
     "wallpapers": [
       {
-        "id": "11321",
-        "title": "The Sea",
-        "author": "John Frederick Kensett",
-        "year": "1872",
-        "source": "met",
-        "collection": "met-impressionism-collection",
-        "imagePath": "images-eink/met/met-impressionism-collection/met-11321.webp",
-        image: require('./images-eink/met/met-impressionism-collection/met-11321.webp')
-      },
-      {
         "id": "436441",
         "title": "Wooded Upland Landscape",
         "author": "Thomas Gainsborough",
