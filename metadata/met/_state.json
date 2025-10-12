@@ -3,8 +3,57 @@
     "met-featured-collection": {
       "offset": 5,
       "totalSaved": 5,
-      "lastRunAt": "2025-10-08T10:00:23.475Z",
+      "lastRunAt": "2025-10-12T06:03:21.873Z",
       "lastLimit": 5,
+      "query": ""
+    },
+    "met-landscape-collection": {
+      "offset": 11,
+      "totalSaved": 8,
+      "lastRunAt": "2025-10-12T06:11:36.219Z",
+      "lastLimit": 11,
+      "query": ""
+    },
+    "met-seascape-collection": {
+      "offset": 10,
+      "totalSaved": 7,
+      "lastRunAt": "2025-10-12T06:11:36.220Z",
+      "lastLimit": 10,
+      "query": ""
+    },
+    "met-floral-collection": {
+      "offset": 8,
+      "totalSaved": 7,
+      "lastRunAt": "2025-10-12T06:11:36.221Z",
+      "lastLimit": 10,
+      "query": ""
+    },
+    "met-celestial-collection": {
+      "offset": 7,
+      "totalSaved": 4,
+      "lastRunAt": "2025-10-12T06:05:34.645Z",
+      "lastLimit": 10,
+      "query": ""
+    },
+    "met-myth-collection": {
+      "offset": 4,
+      "totalSaved": 3,
+      "lastRunAt": "2025-10-12T06:05:45.657Z",
+      "lastLimit": 10,
+      "query": ""
+    },
+    "met-romanticism-collection": {
+      "offset": 7,
+      "totalSaved": 5,
+      "lastRunAt": "2025-10-12T06:05:52.134Z",
+      "lastLimit": 10,
+      "query": ""
+    },
+    "met-impressionism-collection": {
+      "offset": 11,
+      "totalSaved": 7,
+      "lastRunAt": "2025-10-12T06:11:36.221Z",
+      "lastLimit": 11,
       "query": ""
     }
   }
