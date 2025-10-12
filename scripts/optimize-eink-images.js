@@ -4,7 +4,14 @@ import fs from "fs/promises";
 import path from "path";
 import sharp from "sharp";
 
-const SUPPORTED_EXTENSIONS = new Set([".webp", ".jpeg", ".jpg", ".png", ".tif", ".tiff"]);
+const SUPPORTED_EXTENSIONS = new Set([
+  ".webp",
+  ".jpeg",
+  ".jpg",
+  ".png",
+  ".tif",
+  ".tiff",
+]);
 
 function parseArgs(argv) {
   const options = {
@@ -51,7 +58,6 @@ function parseArgs(argv) {
       case "-h":
         printHelp();
         process.exit(0);
-        break;
       default:
         console.warn(`Unknown option: ${arg}`);
         printHelp();
@@ -69,12 +75,20 @@ function parseArgs(argv) {
     process.exit(1);
   }
 
-  if (!Number.isFinite(options.quality) || options.quality <= 0 || options.quality > 100) {
+  if (
+    !Number.isFinite(options.quality) ||
+    options.quality <= 0 ||
+    options.quality > 100
+  ) {
     console.error("quality must be a number between 1 and 100");
     process.exit(1);
   }
 
-  if (!Number.isFinite(options.effort) || options.effort < 0 || options.effort > 6) {
+  if (
+    !Number.isFinite(options.effort) ||
+    options.effort < 0 ||
+    options.effort > 6
+  ) {
     console.error("effort must be between 0 (fastest) and 6 (slowest)");
     process.exit(1);
   }

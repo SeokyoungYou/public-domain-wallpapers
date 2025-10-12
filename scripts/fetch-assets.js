@@ -25,7 +25,9 @@ const SOURCE_CONFIG = {
     async fetchBatch({ limit, query, offset, category }) {
       const sourceKey = "met";
       const categoryIds = Array.isArray(category.objectIds)
-        ? category.objectIds.map((value) => String(value).trim()).filter(Boolean)
+        ? category.objectIds
+            .map((value) => String(value).trim())
+            .filter(Boolean)
         : [];
 
       if (categoryIds.length > 0) {
@@ -36,10 +38,16 @@ const SOURCE_CONFIG = {
         const results = [];
         let nextOffset = offset;
 
-        for (let index = offset; index < categoryIds.length && results.length < limit; index += 1) {
+        for (
+          let index = offset;
+          index < categoryIds.length && results.length < limit;
+          index += 1
+        ) {
           const objectId = categoryIds[index];
           if (shouldIgnore(sourceKey, objectId)) {
-            console.log(`[${sourceKey}] Ignoring object ${objectId} via ignore list`);
+            console.log(
+              `[${sourceKey}] Ignoring object ${objectId} via ignore list`
+            );
             nextOffset = index + 1;
             continue;
           }
@@ -48,16 +56,19 @@ const SOURCE_CONFIG = {
             IMAGE_ROOT,
             sourceKey,
             category.id,
-            `${storageKey}.webp`,
+            `${storageKey}.webp`
           );
           const metadataPath = path.join(
             METADATA_ROOT,
             sourceKey,
             category.id,
-            `${storageKey}.json`,
+            `${storageKey}.json`
           );
 
-          if (await fileExists(imagePath) && await fileExists(metadataPath)) {
+          if (
+            (await fileExists(imagePath)) &&
+            (await fileExists(metadataPath))
+          ) {
             console.log(`[${sourceKey}] Skipping cached object ${objectId}`);
             nextOffset = index + 1;
             continue;
@@ -69,7 +80,9 @@ const SOURCE_CONFIG = {
           nextOffset = index + 1;
 
           if (!objectResponse.ok) {
-            console.warn(`Failed to fetch Met object ${objectId}: ${objectResponse.status}`);
+            console.warn(
+              `Failed to fetch Met object ${objectId}: ${objectResponse.status}`
+            );
             continue;
           }
 
@@ -130,23 +143,25 @@ const SOURCE_CONFIG = {
         nextOffset += 1;
         const storageKey = makeStorageKey(sourceKey, objectId);
         if (shouldIgnore(sourceKey, objectId)) {
-          console.log(`[${sourceKey}] Ignoring object ${objectId} via ignore list`);
+          console.log(
+            `[${sourceKey}] Ignoring object ${objectId} via ignore list`
+          );
           continue;
         }
         const imagePath = path.join(
           IMAGE_ROOT,
           sourceKey,
           category.id,
-          `${storageKey}.webp`,
+          `${storageKey}.webp`
         );
         const metadataPath = path.join(
           METADATA_ROOT,
           sourceKey,
           category.id,
-          `${storageKey}.json`,
+          `${storageKey}.json`
         );
 
-        if (await fileExists(imagePath) && await fileExists(metadataPath)) {
+        if ((await fileExists(imagePath)) && (await fileExists(metadataPath))) {
           console.log(`[${sourceKey}] Skipping cached object ${objectId}`);
           continue;
         }
@@ -202,10 +217,16 @@ const SOURCE_CONFIG = {
         const results = [];
         let nextOffset = offset;
 
-        for (let index = offset; index < categoryIds.length && results.length < limit; index += 1) {
+        for (
+          let index = offset;
+          index < categoryIds.length && results.length < limit;
+          index += 1
+        ) {
           const nasaId = categoryIds[index];
           if (shouldIgnore(sourceKey, nasaId)) {
-            console.log(`[${sourceKey}] Ignoring asset ${nasaId} via ignore list`);
+            console.log(
+              `[${sourceKey}] Ignoring asset ${nasaId} via ignore list`
+            );
             nextOffset = index + 1;
             continue;
           }
@@ -214,16 +235,19 @@ const SOURCE_CONFIG = {
             IMAGE_ROOT,
             sourceKey,
             category.id,
-            `${storageKey}.webp`,
+            `${storageKey}.webp`
           );
           const metadataPath = path.join(
             METADATA_ROOT,
             sourceKey,
             category.id,
-            `${storageKey}.json`,
+            `${storageKey}.json`
           );
 
-          if (await fileExists(imagePath) && await fileExists(metadataPath)) {
+          if (
+            (await fileExists(imagePath)) &&
+            (await fileExists(metadataPath))
+          ) {
             console.log(`[${sourceKey}] Skipping cached asset ${nasaId}`);
             nextOffset = index + 1;
             continue;
@@ -241,7 +265,8 @@ const SOURCE_CONFIG = {
             id: metadata.nasa_id ?? randomUUID(),
             storageKey,
             title: metadata.title ?? "Untitled NASA image",
-            author: metadata.photographer || metadata.secondary_creator || "NASA",
+            author:
+              metadata.photographer || metadata.secondary_creator || "NASA",
             description: metadata.description ?? "",
             year: metadata.date_created?.slice(0, 4) ?? "",
             imageUrl: assetUrl,
@@ -299,19 +324,21 @@ const SOURCE_CONFIG = {
           const metadata = item.data?.[0];
           if (!metadata) continue;
 
-        const assetUrl = await resolveNasaAssetUrl(item);
-        if (!assetUrl) continue;
+          const assetUrl = await resolveNasaAssetUrl(item);
+          if (!assetUrl) continue;
 
-        const assetId = metadata.nasa_id ?? randomUUID();
-        const storageKey = makeStorageKey(sourceKey, assetId);
-        if (shouldIgnore(sourceKey, assetId)) {
-          console.log(`[${sourceKey}] Ignoring asset ${assetId} via ignore list`);
-          continue;
-        }
+          const assetId = metadata.nasa_id ?? randomUUID();
+          const storageKey = makeStorageKey(sourceKey, assetId);
+          if (shouldIgnore(sourceKey, assetId)) {
+            console.log(
+              `[${sourceKey}] Ignoring asset ${assetId} via ignore list`
+            );
+            continue;
+          }
 
-        results.push({
-          id: assetId,
-          storageKey,
+          results.push({
+            id: assetId,
+            storageKey,
             title: metadata.title ?? "Untitled NASA image",
             author:
               metadata.photographer || metadata.secondary_creator || "NASA",
@@ -457,7 +484,9 @@ async function loadIgnoreSets() {
     parsed = await readJsonFile(IGNORE_FILE);
   } catch (error) {
     if (error.code !== "ENOENT") {
-      console.warn(`Failed to read ignore list at ${IGNORE_FILE}: ${error.message}`);
+      console.warn(
+        `Failed to read ignore list at ${IGNORE_FILE}: ${error.message}`
+      );
     }
     IGNORE_SETS = {};
     return;
@@ -538,8 +567,7 @@ async function loadSourceCategories(sourceKey) {
         ? sanitizeFileName(query)
         : sanitizeFileName(`${sourceKey}-category-${index + 1}`);
 
-      const id =
-        category.id?.trim() || fallbackId || `category-${index + 1}`;
+      const id = category.id?.trim() || fallbackId || `category-${index + 1}`;
 
       return {
         ...category,
@@ -548,28 +576,6 @@ async function loadSourceCategories(sourceKey) {
       };
     })
     .filter(Boolean);
-}
-
-async function loadSourceState(sourceKey) {
-  const statePath = path.join(METADATA_ROOT, sourceKey, "_state.json");
-
-  if (!(await fileExists(statePath))) {
-    return { categories: {} };
-  }
-
-  try {
-    return await readJsonFile(statePath);
-  } catch (error) {
-    console.warn(`Failed to parse state for ${sourceKey}: ${error.message}`);
-    return { categories: {} };
-  }
-}
-
-async function saveSourceState(sourceKey, state) {
-  const sourceMetadataDir = path.join(METADATA_ROOT, sourceKey);
-  await ensureDir(sourceMetadataDir);
-  const statePath = path.join(sourceMetadataDir, "_state.json");
-  await writeFile(statePath, JSON.stringify(state, null, 2));
 }
 
 async function countMetadataFiles(metadataDir) {
@@ -670,7 +676,8 @@ function sanitizeFileName(input) {
 }
 
 function makeStorageKey(sourceKey, id) {
-  const idPart = id && String(id).trim().length > 0 ? String(id).trim() : randomUUID();
+  const idPart =
+    id && String(id).trim().length > 0 ? String(id).trim() : randomUUID();
   return sanitizeFileName(`${sourceKey}-${idPart}`);
 }
 
@@ -684,7 +691,9 @@ async function downloadAndConvert({
 }) {
   if (shouldIgnore(sourceKey, item.id)) {
     console.log(
-      `[${sourceKey}] Skipping ${item.id} (${item.title || "untitled"}) due to ignore list entry`
+      `[${sourceKey}] Skipping ${item.id} (${
+        item.title || "untitled"
+      }) due to ignore list entry`
     );
     return false;
   }
@@ -766,9 +775,6 @@ async function run() {
       continue;
     }
 
-    const sourceState = await loadSourceState(sourceKey);
-    sourceState.categories = sourceState.categories ?? {};
-
     console.log(
       `\nProcessing ${config.label} (${categories.length} categories)...`
     );
@@ -782,9 +788,7 @@ async function run() {
       const metadataDir = path.join(METADATA_ROOT, sourceKey, categoryId);
       await Promise.all([ensureDir(imageDir), ensureDir(metadataDir)]);
 
-      const storedCount = await countMetadataFiles(metadataDir);
-      const stateOffset = sourceState.categories[categoryId]?.offset ?? 0;
-      const offset = Math.max(storedCount, stateOffset);
+      const offset = await countMetadataFiles(metadataDir);
 
       console.log(
         `\n[${sourceKey}] ${categoryLabel}: fetching up to ${categoryLimit} items (offset ${offset})`
@@ -821,15 +825,6 @@ async function run() {
       }
 
       const totalSaved = await countMetadataFiles(metadataDir);
-      sourceState.categories[categoryId] = {
-        offset: nextOffset,
-        totalSaved,
-        lastRunAt: new Date().toISOString(),
-        lastLimit: categoryLimit,
-        query: category.query,
-      };
-
-      await saveSourceState(sourceKey, sourceState);
 
       console.log(
         `[${sourceKey}] ${categoryLabel}: saved ${savedCount} new images (total ${totalSaved}), next offset ${nextOffset}`

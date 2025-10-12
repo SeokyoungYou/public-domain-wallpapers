@@ -38,7 +38,7 @@ const MET_WALLPAPERS = [
     "author": "Gustave Caillebotte",
     "year": "1893",
     "source": "met",
-    "collection": "met-featured-collection",
+    "collection": "met-floral-collection",
     "imagePath": "images-eink/met/met-floral-collection/met-671456.webp",
     image: require('./images-eink/met/met-floral-collection/met-671456.webp')
   },
@@ -128,7 +128,7 @@ const MET_WALLPAPERS = [
     "author": "Edouard Manet",
     "year": "1874",
     "source": "met",
-    "collection": "met-featured-collection",
+    "collection": "met-impressionism-collection",
     "imagePath": "images-eink/met/met-impressionism-collection/met-436965.webp",
     image: require('./images-eink/met/met-impressionism-collection/met-436965.webp')
   },
@@ -243,86 +243,6 @@ const MET_WALLPAPERS = [
     image: require('./images-eink/met/met-landscape-collection/met-45650.webp')
   },
   {
-    "id": "437380",
-    "title": "The Chariot of Apollo",
-    "author": "Odilon Redon",
-    "year": "1905–16",
-    "source": "met",
-    "collection": "met-myth-collection",
-    "imagePath": "images-eink/met/met-myth-collection/met-437380.webp",
-    image: require('./images-eink/met/met-myth-collection/met-437380.webp')
-  },
-  {
-    "id": "437383",
-    "title": "Pandora",
-    "author": "Odilon Redon",
-    "year": "ca. 1914",
-    "source": "met",
-    "collection": "met-myth-collection",
-    "imagePath": "images-eink/met/met-myth-collection/met-437383.webp",
-    image: require('./images-eink/met/met-myth-collection/met-437383.webp')
-  },
-  {
-    "id": "59035",
-    "title": "Seated Baku (Mythical Creature Devouring Nightmares)",
-    "author": "Unknown artist",
-    "year": "18th century",
-    "source": "met",
-    "collection": "met-myth-collection",
-    "imagePath": "images-eink/met/met-myth-collection/met-59035.webp",
-    image: require('./images-eink/met/met-myth-collection/met-59035.webp')
-  },
-  {
-    "id": "435997",
-    "title": "The Storm",
-    "author": "Pierre-Auguste Cot",
-    "year": "1880",
-    "source": "met",
-    "collection": "met-romanticism-collection",
-    "imagePath": "images-eink/met/met-romanticism-collection/met-435997.webp",
-    image: require('./images-eink/met/met-romanticism-collection/met-435997.webp')
-  },
-  {
-    "id": "436455",
-    "title": "Evening: Landscape with an Aqueduct",
-    "author": "Théodore Gericault",
-    "year": "1818",
-    "source": "met",
-    "collection": "met-romanticism-collection",
-    "imagePath": "images-eink/met/met-romanticism-collection/met-436455.webp",
-    image: require('./images-eink/met/met-romanticism-collection/met-436455.webp')
-  },
-  {
-    "id": "436831",
-    "title": "An Extensive Wooded Landscape",
-    "author": "Philips Koninck",
-    "year": "1670s",
-    "source": "met",
-    "collection": "met-romanticism-collection",
-    "imagePath": "images-eink/met/met-romanticism-collection/met-436831.webp",
-    image: require('./images-eink/met/met-romanticism-collection/met-436831.webp')
-  },
-  {
-    "id": "437191",
-    "title": "Landscape at Sunset",
-    "author": "Aert van der Neer",
-    "year": "1650s",
-    "source": "met",
-    "collection": "met-romanticism-collection",
-    "imagePath": "images-eink/met/met-romanticism-collection/met-437191.webp",
-    image: require('./images-eink/met/met-romanticism-collection/met-437191.webp')
-  },
-  {
-    "id": "438031",
-    "title": "Summer Flowers",
-    "author": "Henri Fantin-Latour",
-    "year": "1880",
-    "source": "met",
-    "collection": "met-romanticism-collection",
-    "imagePath": "images-eink/met/met-romanticism-collection/met-438031.webp",
-    image: require('./images-eink/met/met-romanticism-collection/met-438031.webp')
-  },
-  {
     "id": "11321",
     "title": "The Sea",
     "author": "John Frederick Kensett",
@@ -398,7 +318,7 @@ const MET_WALLPAPERS = [
     "author": "Joseph Mallord William Turner",
     "year": "ca. 1835",
     "source": "met",
-    "collection": "met-featured-collection",
+    "collection": "met-seascape-collection",
     "imagePath": "images-eink/met/met-seascape-collection/met-437853.webp",
     image: require('./images-eink/met/met-seascape-collection/met-437853.webp')
   }
