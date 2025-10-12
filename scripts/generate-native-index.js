@@ -208,9 +208,14 @@ async function generateNativeIndex() {
       allId.toUpperCase().replace(/-/g, "_") + "_WALLPAPERS";
 
     return {
-      constant: `const ${allConstantName} = [\n  ${constantNames
-        .map((name) => `...${name}`)
-        .join(",\n  ")}\n];`,
+      constant: `// 중복 ID 제거를 위해 Map 사용
+const ${allConstantName} = Array.from(
+  new Map(
+    [
+      ${constantNames.map((name) => `...${name}`).join(",\n      ")}
+    ].map((item) => [item.id, item])
+  ).values()
+);`,
       collection: `  "${allId}": {
     "id": "${allId}",
     "name": "All ${sourceName} Collection",
