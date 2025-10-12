@@ -33,42 +33,88 @@ console.log(hokusai.license); // "Public Domain (The Met Open Access)"
 
 If you prefer CommonJS, use `createRequire` to load the same JSON files.
 
-When you need to enumerate many records at once, the package also ships programmatic helpers that pair each metadata entry with its optimised e-ink image path:
+When you need to enumerate many records at once, the package ships programmatic helpers:
 
 ```js
-import { loadMetWallpapers, loadNasaWallpapers, getRandomWallpaper } from "public-domain-wallpapers";
+import {
+  getSources,
+  getSource,
+  getCollections,
+  getWallpapers,
+  getAllWallpapers,
+  getRandomWallpaper,
+} from "public-domain-wallpapers";
 
-const metWallpapers = await loadMetWallpapers(); // only items that live in metadata/met
-const nasaWallpapers = await loadNasaWallpapers({ includeAbsolutePaths: true });
+// Get all sources
+const sources = getSources();
+// [{ id: "met", name: "The Met Museum", collections: {...} }, ...]
 
-// Get a random wallpaper
-const randomMet = await getRandomWallpaper(); // defaults to "met"
-const randomNasa = await getRandomWallpaper({ category: "nasa" });
+// Get specific source
+const metSource = getSource("met");
+console.log(metSource.name); // "The Met Museum"
+
+// Get collections from a source
+const metCollections = getCollections("met");
+// [{ id: "met-floral-collection", name: "...", wallpapers: [...] }, ...]
+
+// Get wallpapers from a collection
+const floralWallpapers = getWallpapers("met-floral-collection");
+
+// Get all wallpapers
+const allWallpapers = getAllWallpapers();
+
+// Get random wallpaper
+const randomMet = getRandomWallpaper({ sourceId: "met" });
+const randomFloral = getRandomWallpaper({
+  collectionId: "met-floral-collection",
+});
+const anyRandom = getRandomWallpaper();
 ```
 
-Both helpers return an array of `{ id, title, author, description, year, license, source, image, imagePath, metadataPath, ... }`. When `includeAbsolutePaths` is `true`, additional `metadataFile` and `imageFile` fields are provided so you can copy or post-process assets directly from the package directory. The `imagePath` always points to the optimised WebP file found under `images-eink/`.
+All wallpapers include: `{ id, title, author, year, source, collection, imagePath, image, ... }`. The `imagePath` always points to the optimised WebP file found under `images-eink/`.
 
 ### 2. React Native
 
 React Native는 Metro bundler의 동적 require 제한으로 인해, 모든 이미지를 정적으로 import합니다. 패키지는 이미 최적화되어 있어 즉시 사용 가능합니다.
 
 ```tsx
-import { loadMetWallpapers, loadNasaWallpapers, getRandomWallpaper } from "public-domain-wallpapers";
-import { Image, StyleSheet, View } from "react-native";
+import {
+  WALLPAPER_SOURCES,
+  getWallpapers,
+  getRandomWallpaper
+} from "public-domain-wallpapers";
+import { Image, FlatList, StyleSheet } from "react-native";
 
-// Load all Met wallpapers
-const metWallpapers = loadMetWallpapers();
-console.log(metWallpapers[0].title); // "The Harvesters"
+// 소스별로 컬렉션 탐색
+const metCollections = Object.values(WALLPAPER_SOURCES.met.collections);
+console.log(metCollections[0].name); // "Floral & Botanical Collection"
 
-// Use in Image component
-<Image source={metWallpapers[0].image} style={styles.wallpaper} />
+// 특정 컬렉션의 wallpaper들
+const floralWallpapers = getWallpapers("met-floral-collection");
 
-// Get a random wallpaper
-const randomWallpaper = getRandomWallpaper({ category: "nasa" });
-<Image source={randomWallpaper.image} style={styles.wallpaper} />
+// Image 컴포넌트에서 사용
+<Image source={floralWallpapers[0].image} style={styles.wallpaper} />
+
+// 랜덤 wallpaper
+const randomMet = getRandomWallpaper({ sourceId: "met" });
+const randomNasa = getRandomWallpaper({ sourceId: "nasa" });
+const anyRandom = getRandomWallpaper();
+
+<Image source={randomMet.image} style={styles.wallpaper} />
+
+// FlatList에서 사용
+<FlatList
+  data={floralWallpapers}
+  renderItem={({ item }) => (
+    <Image source={item.image} style={styles.thumbnail} />
+  )}
+  keyExtractor={(item) => item.id}
+/>
 ```
 
 모든 이미지는 `index.js`에서 정적으로 require되어 Metro bundler와 완벽하게 호환됩니다.
+
+**TypeScript 지원**: 완전한 타입 정의가 포함되어 있어 자동완성과 타입 체크를 지원합니다.
 
 **패키지 관리자를 위한 참고사항**: 새로운 에셋을 추가한 후에는 `npm run generate:index`를 실행하여 최신 메타데이터로 `index.js`를 재생성해주세요.
 
@@ -82,9 +128,17 @@ import { createRequire } from "node:module";
 import path from "node:path";
 
 const require = createRequire(import.meta.url);
-const pkgRoot = path.dirname(require.resolve("public-domain-wallpapers/package.json"));
+const pkgRoot = path.dirname(
+  require.resolve("public-domain-wallpapers/package.json")
+);
 
-const imageFile = path.join(pkgRoot, "images-eink", "met", "met-featured-collection", "met-436839.webp");
+const imageFile = path.join(
+  pkgRoot,
+  "images-eink",
+  "met",
+  "met-featured-collection",
+  "met-436839.webp"
+);
 await copyFile(imageFile, path.join("public", "wallpapers", "met-436839.webp"));
 ```
 

@@ -1,50 +1,90 @@
 import type { ImageSourcePropType } from "react-native";
 
-export type WallpaperSource = "met" | "nasa";
+export type WallpaperSourceId = "met" | "nasa";
 
-export interface PublicDomainWallpaper {
+export interface Wallpaper {
   id: string;
   title: string;
-  author?: string;
-  year?: string;
-  source: WallpaperSource;
-  collection?: string;
-  image: ImageSourcePropType;
+  author: string;
+  year: string;
+  source: WallpaperSourceId;
+  collection: string;
   imagePath: string;
+  image: ImageSourcePropType;
+}
+
+export interface WallpaperCollection {
+  id: string;
+  name: string;
+  wallpapers: Wallpaper[];
+}
+
+export interface WallpaperSource {
+  id: WallpaperSourceId;
+  name: string;
+  collections: Record<string, WallpaperCollection>;
 }
 
 export interface GetRandomWallpaperOptions {
-  category?: WallpaperSource;
+  collectionId?: string;
+  sourceId?: WallpaperSourceId;
 }
 
-export interface GetAvailableCollectionsOptions {
-  source?: WallpaperSource | "all";
-}
+/**
+ * 모든 wallpaper 소스 (단일 source of truth)
+ */
+export const WALLPAPER_SOURCES: Record<WallpaperSourceId, WallpaperSource>;
 
-export interface GetWallpapersByCollectionOptions {
-  collection: string;
-}
+/**
+ * 모든 소스의 정보를 배열로 반환한다.
+ */
+export function getSources(): WallpaperSource[];
 
-export interface GetRandomWallpaperFromCollectionOptions {
-  collection: string;
-}
+/**
+ * 특정 소스 정보를 반환한다.
+ */
+export function getSource(sourceId: WallpaperSourceId): WallpaperSource | null;
 
-export function loadMetWallpapers(): PublicDomainWallpaper[];
+/**
+ * 모든 컬렉션을 flat 구조로 반환한다.
+ */
+export function getAllCollections(): Record<string, WallpaperCollection>;
 
-export function loadNasaWallpapers(): PublicDomainWallpaper[];
+/**
+ * 특정 소스의 모든 컬렉션을 배열로 반환한다.
+ */
+export function getCollections(
+  sourceId: WallpaperSourceId
+): WallpaperCollection[];
 
+/**
+ * 특정 컬렉션을 반환한다.
+ */
+export function getCollection(collectionId: string): WallpaperCollection | null;
+
+/**
+ * 특정 컬렉션의 모든 wallpaper를 반환한다.
+ */
+export function getWallpapers(collectionId: string): Wallpaper[];
+
+/**
+ * 특정 소스의 모든 wallpaper를 반환한다.
+ */
+export function getWallpapersBySource(sourceId: WallpaperSourceId): Wallpaper[];
+
+/**
+ * 모든 wallpaper를 단일 배열로 반환한다.
+ */
+export function getAllWallpapers(): Wallpaper[];
+
+/**
+ * 특정 wallpaper를 ID로 찾는다.
+ */
+export function getWallpaperById(wallpaperId: string): Wallpaper | null;
+
+/**
+ * 랜덤 wallpaper를 반환한다.
+ */
 export function getRandomWallpaper(
   options?: GetRandomWallpaperOptions
-): PublicDomainWallpaper | null;
-
-export function getAvailableCollections(
-  options?: GetAvailableCollectionsOptions
-): string[];
-
-export function getWallpapersByCollection(
-  options: GetWallpapersByCollectionOptions
-): PublicDomainWallpaper[];
-
-export function getRandomWallpaperFromCollection(
-  options: GetRandomWallpaperFromCollectionOptions
-): PublicDomainWallpaper | null;
+): Wallpaper | null;
