@@ -26,6 +26,7 @@ Each category should look like:
 Rules:
 - Keep IDs unique within the category.
 - If you append new IDs to an existing collection, increase `limit` to include all intended IDs.
+- Keep each collection at **12 images max** (`limit <= 12`).
 
 ### MET
 Edit `config/met.json`.
@@ -35,6 +36,12 @@ A category can use either:
 
 Include:
 - `id`, `name`, and `limit`
+
+Rules:
+- Keep each collection at **12 images max** (`limit <= 12`).
+- Keep `objectIds` unique within a category.
+- Do not reuse the same MET object (or same rendered image) across different MET collections.
+- If an artwork fits multiple themes, assign it to exactly one canonical collection and fill other collections with different IDs.
 
 ## 2) Fetch New Assets
 Run only for the source you changed.

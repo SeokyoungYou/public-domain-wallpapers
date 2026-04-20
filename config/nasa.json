@@ -6,25 +6,32 @@
       "nasaIds": [
         "PIA13028",
         "PIA13108",
-        "PIA22568",
         "PIA05062",
+        "PIA22568",
         "PIA03678",
         "PIA17553",
         "PIA14091",
         "PIA23646",
         "PIA04921",
-        "GSFC_20171208_Archive_e001464",
-        "GSFC_20171208_Archive_e001955",
-        "GSFC_20171208_Archive_e000699",
-        "GSFC_20171208_Archive_e001743",
         "PIA03606",
-        "PIA04216",
-        "GSFC_20171208_Archive_e002076",
         "PIA04226",
-        "PIA17563",
-        "PIA14442"
+        "PIA04216"
       ],
-      "limit": 19
+      "limit": 12
+    },
+    {
+      "id": "nasa-hubble-nebula-collection",
+      "name": "Hubble Nebulae",
+      "nasaIds": [
+        "GSFC_20171208_Archive_e000699",
+        "GSFC_20171208_Archive_e001464",
+        "GSFC_20171208_Archive_e001743",
+        "GSFC_20171208_Archive_e001955",
+        "GSFC_20171208_Archive_e002076",
+        "PIA14442",
+        "PIA17563"
+      ],
+      "limit": 7
     },
     {
       "id": "nasa-solar-system-collection",

@@ -563,56 +563,6 @@ const ALL_MET_WALLPAPERS = Array.from(
 // NASA Wallpapers
 const NASA_DEEP_SPACE_COLLECTION_WALLPAPERS = [
   {
-    "id": "GSFC_20171208_Archive_e000699",
-    "title": "Hubble View of a Nitrogen-Rich Nebula",
-    "author": "NASA",
-    "year": "2017",
-    "source": "nasa",
-    "collection": "nasa-deep-space-collection",
-    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-gsfc_20171208_archive_e000699.webp",
-    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-gsfc_20171208_archive_e000699.webp')
-  },
-  {
-    "id": "GSFC_20171208_Archive_e001464",
-    "title": "Hubble reveals the Ring Nebula’s true shape",
-    "author": "NASA",
-    "year": "2017",
-    "source": "nasa",
-    "collection": "nasa-deep-space-collection",
-    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-gsfc_20171208_archive_e001464.webp",
-    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-gsfc_20171208_archive_e001464.webp')
-  },
-  {
-    "id": "GSFC_20171208_Archive_e001743",
-    "title": "Hubble Images Searchlight Beams from a Preplanetary Nebula",
-    "author": "NASA",
-    "year": "2017",
-    "source": "nasa",
-    "collection": "nasa-deep-space-collection",
-    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-gsfc_20171208_archive_e001743.webp",
-    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-gsfc_20171208_archive_e001743.webp')
-  },
-  {
-    "id": "GSFC_20171208_Archive_e001955",
-    "title": "Hubble reveals heart of Lagoon Nebula",
-    "author": "NASA",
-    "year": "2017",
-    "source": "nasa",
-    "collection": "nasa-deep-space-collection",
-    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-gsfc_20171208_archive_e001955.webp",
-    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-gsfc_20171208_archive_e001955.webp')
-  },
-  {
-    "id": "GSFC_20171208_Archive_e002076",
-    "title": "Hubble Captures Spectacular \"Landscape\" in the Carina Nebula",
-    "author": "NASA",
-    "year": "2017",
-    "source": "nasa",
-    "collection": "nasa-deep-space-collection",
-    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-gsfc_20171208_archive_e002076.webp",
-    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-gsfc_20171208_archive_e002076.webp')
-  },
-  {
     "id": "PIA03606",
     "title": "Most Detailed Image of the Crab Nebula",
     "author": "NASA/ESA/JPL/Arizona State Univ.",
@@ -703,16 +653,6 @@ const NASA_DEEP_SPACE_COLLECTION_WALLPAPERS = [
     image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-pia14091.webp')
   },
   {
-    "id": "PIA14442",
-    "title": "Hubble Finds an Hourglass Nebula around a Dying Star",
-    "author": "NASA/JPL-Caltech/ESA, the Hubble Heritage Team STScI/AURA",
-    "year": "1996",
-    "source": "nasa",
-    "collection": "nasa-deep-space-collection",
-    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-pia14442.webp",
-    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-pia14442.webp')
-  },
-  {
     "id": "PIA17553",
     "title": "Witch Head Brews Baby Stars",
     "author": "NASA/JPL-Caltech",
@@ -721,16 +661,6 @@ const NASA_DEEP_SPACE_COLLECTION_WALLPAPERS = [
     "collection": "nasa-deep-space-collection",
     "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-pia17553.webp",
     image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-pia17553.webp')
-  },
-  {
-    "id": "PIA17563",
-    "title": "Crab Nebula, as Seen by Herschel and Hubble",
-    "author": "ESA/Herschel/PACS/MESS Key Programme Supernova Remnant Team; NASA, ESA and Allison Loll/Jeff Hester Arizona State University",
-    "year": "2013",
-    "source": "nasa",
-    "collection": "nasa-deep-space-collection",
-    "imagePath": "images-eink/nasa/nasa-deep-space-collection/nasa-pia17563.webp",
-    image: require('./images-eink/nasa/nasa-deep-space-collection/nasa-pia17563.webp')
   },
   {
     "id": "PIA22568",
@@ -834,6 +764,79 @@ const NASA_EARTH_ORBIT_COLLECTION_WALLPAPERS = [
     "collection": "nasa-earth-orbit-collection",
     "imagePath": "images-eink/nasa/nasa-earth-orbit-collection/nasa-sl4-143-4707.webp",
     image: require('./images-eink/nasa/nasa-earth-orbit-collection/nasa-sl4-143-4707.webp')
+  }
+];
+
+const NASA_HUBBLE_NEBULA_COLLECTION_WALLPAPERS = [
+  {
+    "id": "GSFC_20171208_Archive_e000699",
+    "title": "Hubble View of a Nitrogen-Rich Nebula",
+    "author": "NASA",
+    "year": "2017",
+    "source": "nasa",
+    "collection": "nasa-hubble-nebula-collection",
+    "imagePath": "images-eink/nasa/nasa-hubble-nebula-collection/nasa-gsfc_20171208_archive_e000699.webp",
+    image: require('./images-eink/nasa/nasa-hubble-nebula-collection/nasa-gsfc_20171208_archive_e000699.webp')
+  },
+  {
+    "id": "GSFC_20171208_Archive_e001464",
+    "title": "Hubble reveals the Ring Nebula’s true shape",
+    "author": "NASA",
+    "year": "2017",
+    "source": "nasa",
+    "collection": "nasa-hubble-nebula-collection",
+    "imagePath": "images-eink/nasa/nasa-hubble-nebula-collection/nasa-gsfc_20171208_archive_e001464.webp",
+    image: require('./images-eink/nasa/nasa-hubble-nebula-collection/nasa-gsfc_20171208_archive_e001464.webp')
+  },
+  {
+    "id": "GSFC_20171208_Archive_e001743",
+    "title": "Hubble Images Searchlight Beams from a Preplanetary Nebula",
+    "author": "NASA",
+    "year": "2017",
+    "source": "nasa",
+    "collection": "nasa-hubble-nebula-collection",
+    "imagePath": "images-eink/nasa/nasa-hubble-nebula-collection/nasa-gsfc_20171208_archive_e001743.webp",
+    image: require('./images-eink/nasa/nasa-hubble-nebula-collection/nasa-gsfc_20171208_archive_e001743.webp')
+  },
+  {
+    "id": "GSFC_20171208_Archive_e001955",
+    "title": "Hubble reveals heart of Lagoon Nebula",
+    "author": "NASA",
+    "year": "2017",
+    "source": "nasa",
+    "collection": "nasa-hubble-nebula-collection",
+    "imagePath": "images-eink/nasa/nasa-hubble-nebula-collection/nasa-gsfc_20171208_archive_e001955.webp",
+    image: require('./images-eink/nasa/nasa-hubble-nebula-collection/nasa-gsfc_20171208_archive_e001955.webp')
+  },
+  {
+    "id": "GSFC_20171208_Archive_e002076",
+    "title": "Hubble Captures Spectacular \"Landscape\" in the Carina Nebula",
+    "author": "NASA",
+    "year": "2017",
+    "source": "nasa",
+    "collection": "nasa-hubble-nebula-collection",
+    "imagePath": "images-eink/nasa/nasa-hubble-nebula-collection/nasa-gsfc_20171208_archive_e002076.webp",
+    image: require('./images-eink/nasa/nasa-hubble-nebula-collection/nasa-gsfc_20171208_archive_e002076.webp')
+  },
+  {
+    "id": "PIA14442",
+    "title": "Hubble Finds an Hourglass Nebula around a Dying Star",
+    "author": "NASA/JPL-Caltech/ESA, the Hubble Heritage Team STScI/AURA",
+    "year": "1996",
+    "source": "nasa",
+    "collection": "nasa-hubble-nebula-collection",
+    "imagePath": "images-eink/nasa/nasa-hubble-nebula-collection/nasa-pia14442.webp",
+    image: require('./images-eink/nasa/nasa-hubble-nebula-collection/nasa-pia14442.webp')
+  },
+  {
+    "id": "PIA17563",
+    "title": "Crab Nebula, as Seen by Herschel and Hubble",
+    "author": "ESA/Herschel/PACS/MESS Key Programme Supernova Remnant Team; NASA, ESA and Allison Loll/Jeff Hester Arizona State University",
+    "year": "2013",
+    "source": "nasa",
+    "collection": "nasa-hubble-nebula-collection",
+    "imagePath": "images-eink/nasa/nasa-hubble-nebula-collection/nasa-pia17563.webp",
+    image: require('./images-eink/nasa/nasa-hubble-nebula-collection/nasa-pia17563.webp')
   }
 ];
 
@@ -956,6 +959,7 @@ const ALL_NASA_WALLPAPERS = Array.from(
     [
       ...NASA_DEEP_SPACE_COLLECTION_WALLPAPERS,
       ...NASA_EARTH_ORBIT_COLLECTION_WALLPAPERS,
+      ...NASA_HUBBLE_NEBULA_COLLECTION_WALLPAPERS,
       ...NASA_SOLAR_SYSTEM_COLLECTION_WALLPAPERS
     ].map((item) => [item.id, item])
   ).values()
@@ -1025,6 +1029,11 @@ export const WALLPAPER_SOURCES = {
         "id": "nasa-earth-orbit-collection",
         "name": "Earth Orbit",
         wallpapers: NASA_EARTH_ORBIT_COLLECTION_WALLPAPERS
+      },
+      "nasa-hubble-nebula-collection": {
+        "id": "nasa-hubble-nebula-collection",
+        "name": "Hubble Nebulae",
+        wallpapers: NASA_HUBBLE_NEBULA_COLLECTION_WALLPAPERS
       },
       "nasa-solar-system-collection": {
         "id": "nasa-solar-system-collection",
