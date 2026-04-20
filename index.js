@@ -30,6 +30,26 @@
 // Met Museum Wallpapers
 const MET_FLORAL_COLLECTION_WALLPAPERS = [
   {
+    "id": "11938",
+    "title": "Still Life: Flowers and Fruit",
+    "author": "Severin Roesen",
+    "year": "1850–55",
+    "source": "met",
+    "collection": "met-floral-collection",
+    "imagePath": "images-eink/met/met-floral-collection/met-11938.webp",
+    image: require('./images-eink/met/met-floral-collection/met-11938.webp')
+  },
+  {
+    "id": "436293",
+    "title": "Still Life with Flowers and Fruit",
+    "author": "Henri Fantin-Latour",
+    "year": "1866",
+    "source": "met",
+    "collection": "met-floral-collection",
+    "imagePath": "images-eink/met/met-floral-collection/met-436293.webp",
+    image: require('./images-eink/met/met-floral-collection/met-436293.webp')
+  },
+  {
     "id": "436525",
     "title": "Bouquet of Flowers in a Vase",
     "author": "Vincent van Gogh",
@@ -113,44 +133,34 @@ const MET_FLORAL_COLLECTION_WALLPAPERS = [
 
 const MET_IMPRESSIONISM_COLLECTION_WALLPAPERS = [
   {
-    "id": "11321",
-    "title": "The Sea",
-    "author": "John Frederick Kensett",
-    "year": "1872",
+    "id": "19523",
+    "title": "Low Tide, Riverside Yacht Club",
+    "author": "Theodore Robinson",
+    "year": "1894",
     "source": "met",
     "collection": "met-impressionism-collection",
-    "imagePath": "images-eink/met/met-impressionism-collection/met-11321.webp",
-    image: require('./images-eink/met/met-impressionism-collection/met-11321.webp')
+    "imagePath": "images-eink/met/met-impressionism-collection/met-19523.webp",
+    image: require('./images-eink/met/met-impressionism-collection/met-19523.webp')
   },
   {
-    "id": "436441",
-    "title": "Wooded Upland Landscape",
-    "author": "Thomas Gainsborough",
-    "year": "probably 1783",
+    "id": "435877",
+    "title": "Mont Sainte-Victoire and the Viaduct of the Arc River Valley",
+    "author": "Paul Cézanne",
+    "year": "1882–85",
     "source": "met",
     "collection": "met-impressionism-collection",
-    "imagePath": "images-eink/met/met-impressionism-collection/met-436441.webp",
-    image: require('./images-eink/met/met-impressionism-collection/met-436441.webp')
+    "imagePath": "images-eink/met/met-impressionism-collection/met-435877.webp",
+    image: require('./images-eink/met/met-impressionism-collection/met-435877.webp')
   },
   {
-    "id": "436525",
-    "title": "Bouquet of Flowers in a Vase",
-    "author": "Vincent van Gogh",
-    "year": "1890",
+    "id": "436880",
+    "title": "The Organ Rehearsal",
+    "author": "Henry Lerolle",
+    "year": "1885",
     "source": "met",
     "collection": "met-impressionism-collection",
-    "imagePath": "images-eink/met/met-impressionism-collection/met-436525.webp",
-    image: require('./images-eink/met/met-impressionism-collection/met-436525.webp')
-  },
-  {
-    "id": "436831",
-    "title": "An Extensive Wooded Landscape",
-    "author": "Philips Koninck",
-    "year": "1670s",
-    "source": "met",
-    "collection": "met-impressionism-collection",
-    "imagePath": "images-eink/met/met-impressionism-collection/met-436831.webp",
-    image: require('./images-eink/met/met-impressionism-collection/met-436831.webp')
+    "imagePath": "images-eink/met/met-impressionism-collection/met-436880.webp",
+    image: require('./images-eink/met/met-impressionism-collection/met-436880.webp')
   },
   {
     "id": "436965",
@@ -163,14 +173,14 @@ const MET_IMPRESSIONISM_COLLECTION_WALLPAPERS = [
     image: require('./images-eink/met/met-impressionism-collection/met-436965.webp')
   },
   {
-    "id": "437191",
-    "title": "Landscape at Sunset",
-    "author": "Aert van der Neer",
-    "year": "1650s",
+    "id": "437344",
+    "title": "The Shepherd's Song",
+    "author": "Pierre Puvis de Chavannes",
+    "year": "1891",
     "source": "met",
     "collection": "met-impressionism-collection",
-    "imagePath": "images-eink/met/met-impressionism-collection/met-437191.webp",
-    image: require('./images-eink/met/met-impressionism-collection/met-437191.webp')
+    "imagePath": "images-eink/met/met-impressionism-collection/met-437344.webp",
+    image: require('./images-eink/met/met-impressionism-collection/met-437344.webp')
   },
   {
     "id": "437382",
@@ -183,14 +193,24 @@ const MET_IMPRESSIONISM_COLLECTION_WALLPAPERS = [
     image: require('./images-eink/met/met-impressionism-collection/met-437382.webp')
   },
   {
-    "id": "438031",
-    "title": "Summer Flowers",
-    "author": "Henri Fantin-Latour",
-    "year": "1880",
+    "id": "437430",
+    "title": "By the Seashore",
+    "author": "Auguste Renoir",
+    "year": "1883",
     "source": "met",
     "collection": "met-impressionism-collection",
-    "imagePath": "images-eink/met/met-impressionism-collection/met-438031.webp",
-    image: require('./images-eink/met/met-impressionism-collection/met-438031.webp')
+    "imagePath": "images-eink/met/met-impressionism-collection/met-437430.webp",
+    image: require('./images-eink/met/met-impressionism-collection/met-437430.webp')
+  },
+  {
+    "id": "437990",
+    "title": "Seated Peasant",
+    "author": "Paul Cézanne",
+    "year": "ca. 1892–96",
+    "source": "met",
+    "collection": "met-impressionism-collection",
+    "imagePath": "images-eink/met/met-impressionism-collection/met-437990.webp",
+    image: require('./images-eink/met/met-impressionism-collection/met-437990.webp')
   }
 ];
 
