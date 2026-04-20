@@ -616,7 +616,7 @@ function parseArgs() {
     return args[index + 1] ?? fallback;
   };
 
-  const sourcesValue = getValue("--sources", "met,nasa");
+  const sourcesValue = getValue("--sources", Object.keys(SOURCE_CONFIG).join(","));
   const sources = sourcesValue
     .split(",")
     .map((item) => item.trim())

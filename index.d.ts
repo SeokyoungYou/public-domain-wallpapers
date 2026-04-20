@@ -1,6 +1,6 @@
 import type { ImageSourcePropType } from "react-native";
 
-export type WallpaperSourceId = "met" | "nasa";
+export type WallpaperSourceId = "met" | "nasa" | "nmk";
 
 export interface WallpaperMetadata {
   id: string;
@@ -45,7 +45,7 @@ export interface WallpaperSource {
 
 export interface GetRandomWallpaperOptions {
   collectionId?: string;
-  sourceId?: WallpaperSourceId;
+  sourceId?: string;
 }
 
 /**
@@ -61,7 +61,7 @@ export function getSources(): WallpaperSource[];
 /**
  * 특정 소스 정보를 반환한다.
  */
-export function getSource(sourceId: WallpaperSourceId): WallpaperSource | null;
+export function getSource(sourceId: string): WallpaperSource | null;
 
 /**
  * 모든 컬렉션을 flat 구조로 반환한다.
@@ -71,9 +71,7 @@ export function getAllCollections(): Record<string, WallpaperCollection>;
 /**
  * 특정 소스의 모든 컬렉션을 배열로 반환한다.
  */
-export function getCollections(
-  sourceId: WallpaperSourceId
-): WallpaperCollection[];
+export function getCollections(sourceId: string): WallpaperCollection[];
 
 /**
  * 특정 컬렉션을 반환한다.
@@ -88,7 +86,7 @@ export function getWallpapers(collectionId: string): Wallpaper[];
 /**
  * 특정 소스의 모든 wallpaper를 반환한다.
  */
-export function getWallpapersBySource(sourceId: WallpaperSourceId): Wallpaper[];
+export function getWallpapersBySource(sourceId: string): Wallpaper[];
 
 /**
  * 모든 wallpaper를 단일 배열로 반환한다.

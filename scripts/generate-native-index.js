@@ -5,6 +5,44 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const METADATA_DIR = path.join(__dirname, "..", "metadata");
+const INDEX_OUTPUT_PATH = path.join(__dirname, "..", "index.js");
+const TYPES_OUTPUT_PATH = path.join(__dirname, "..", "index.d.ts");
+
+const SOURCE_NAME_OVERRIDES = {
+  met: "The Met Museum",
+  nasa: "NASA",
+  nmk: "National Museum of Korea",
+};
+
+const toTitleCase = (value) => {
+  return value
+    .trim()
+    .replace(/[-_]+/g, " ")
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join(" ");
+};
+
+const toConstantName = (...segments) => {
+  return segments
+    .filter(Boolean)
+    .join("_")
+    .replace(/[^a-zA-Z0-9]+/g, "_")
+    .replace(/_+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .toUpperCase();
+};
+
+const quote = (value) => JSON.stringify(value);
+
+const toSourceDisplayName = (sourceId) => {
+  return SOURCE_NAME_OVERRIDES[sourceId] ?? toTitleCase(sourceId);
+};
+
+const sortObjectEntries = (obj) => {
+  return Object.entries(obj).sort(([a], [b]) => a.localeCompare(b));
+};
 
 async function listMetadataFiles(currentDir, relativePrefix = "") {
   const entries = await readdir(currentDir, { withFileTypes: true });
@@ -38,223 +76,207 @@ async function listMetadataFiles(currentDir, relativePrefix = "") {
   return files;
 }
 
-async function generateNativeIndex() {
-  const metadataFiles = await listMetadataFiles(METADATA_DIR);
+const stringifyWithRequire = (value) => {
+  return JSON.stringify(value, null, 2).replace(
+    /"image": "require\('(.+?)'\)"/g,
+    "image: require('$1')"
+  );
+};
 
-  const metFiles = metadataFiles.filter((f) => f.startsWith("met/"));
-  const nasaFiles = metadataFiles.filter((f) => f.startsWith("nasa/"));
+const getImagePathFromMetadataPath = (relativeMetadataPath) => {
+  const normalized = relativeMetadataPath.replace(/\\/g, "/");
+  return `images-eink/${normalized.replace(/\.json$/i, ".webp")}`;
+};
 
-  // 메타데이터를 소스별, 컬렉션별로 그룹화
-  const metCollections = {};
-  const nasaCollections = {};
+const getCollectionId = (metadata, pathSegments, sourceId) => {
+  const sourceCategory =
+    typeof metadata.sourceCategory === "string"
+      ? metadata.sourceCategory.trim()
+      : "";
 
-  for (const file of metFiles) {
+  if (sourceCategory) return sourceCategory;
+
+  const pathCategory = pathSegments[pathSegments.length - 2];
+  if (pathCategory) return pathCategory;
+
+  return `${sourceId}-misc-collection`;
+};
+
+const getCollectionName = (metadata, collectionId) => {
+  const categoryLabel =
+    typeof metadata.categoryLabel === "string" ? metadata.categoryLabel.trim() : "";
+
+  if (categoryLabel) return categoryLabel;
+
+  return toTitleCase(collectionId);
+};
+
+async function collectSourcesFromMetadata(metadataFiles) {
+  const sourceMap = {};
+  const sortedMetadataFiles = [...metadataFiles].sort((a, b) =>
+    a.localeCompare(b)
+  );
+
+  for (const file of sortedMetadataFiles) {
+    const normalizedFile = file.replace(/\\/g, "/");
+    const segments = normalizedFile.split("/");
+    const [sourceId] = segments;
+
+    if (!sourceId || segments.length < 2) {
+      continue;
+    }
+
     const fullPath = path.join(METADATA_DIR, file);
     const content = await readFile(fullPath, "utf8");
     const metadata = JSON.parse(content);
-    const segments = file.split("/");
-    const stem = segments[segments.length - 1].replace(".json", "");
-    const relativeDirSegments = segments.slice(0, -1);
-    const baseName =
-      relativeDirSegments.length > 0
-        ? `${relativeDirSegments.join("/")}/${stem}`
-        : stem;
 
-    const collectionId = metadata.sourceCategory;
-    const collectionLabel = metadata.categoryLabel || collectionId;
+    const stem = segments[segments.length - 1].replace(/\.json$/i, "");
+    const collectionId = getCollectionId(metadata, segments, sourceId);
+    const collectionName = getCollectionName(metadata, collectionId);
+    const imagePath = getImagePathFromMetadataPath(normalizedFile);
 
-    if (!metCollections[collectionId]) {
-      metCollections[collectionId] = {
+    if (!sourceMap[sourceId]) {
+      sourceMap[sourceId] = {
+        id: sourceId,
+        name: toSourceDisplayName(sourceId),
+        collections: {},
+      };
+    }
+
+    if (!sourceMap[sourceId].collections[collectionId]) {
+      sourceMap[sourceId].collections[collectionId] = {
         id: collectionId,
-        name: collectionLabel,
+        name: collectionName,
         wallpapers: [],
       };
     }
 
-    metCollections[collectionId].wallpapers.push({
-      id: metadata.id ?? stem,
-      title: metadata.title,
-      author: metadata.author,
-      year: metadata.year,
-      source: "met",
+    sourceMap[sourceId].collections[collectionId].wallpapers.push({
+      id: String(metadata.id ?? stem),
+      title: String(metadata.title ?? ""),
+      author: String(metadata.author ?? ""),
+      year: String(metadata.year ?? ""),
+      source: sourceId,
       collection: collectionId,
-      imagePath: `images-eink/${baseName}.webp`,
+      imagePath,
+      image: `require('./${imagePath}')`,
     });
   }
 
-  for (const file of nasaFiles) {
-    const fullPath = path.join(METADATA_DIR, file);
-    const content = await readFile(fullPath, "utf8");
-    const metadata = JSON.parse(content);
-    const segments = file.split("/");
-    const stem = segments[segments.length - 1].replace(".json", "");
-    const relativeDirSegments = segments.slice(0, -1);
-    const baseName =
-      relativeDirSegments.length > 0
-        ? `${relativeDirSegments.join("/")}/${stem}`
-        : stem;
-
-    const collectionId = metadata.sourceCategory;
-    const collectionLabel = metadata.categoryLabel || collectionId;
-
-    if (!nasaCollections[collectionId]) {
-      nasaCollections[collectionId] = {
-        id: collectionId,
-        name: collectionLabel,
-        wallpapers: [],
-      };
+  for (const source of Object.values(sourceMap)) {
+    for (const collection of Object.values(source.collections)) {
+      collection.wallpapers.sort((a, b) => a.id.localeCompare(b.id));
     }
-
-    nasaCollections[collectionId].wallpapers.push({
-      id: metadata.id ?? stem,
-      title: metadata.title,
-      author: metadata.author,
-      year: metadata.year,
-      source: "nasa",
-      collection: collectionId,
-      imagePath: `images-eink/${baseName}.webp`,
-    });
   }
 
-  // React Native용 정적 require 추가
-  const addImageRequire = (wallpaper) => ({
-    ...wallpaper,
-    image: `require('./${wallpaper.imagePath}')`,
-  });
+  return sourceMap;
+}
 
-  const metCollectionsWithImages = Object.fromEntries(
-    Object.entries(metCollections).map(([id, collection]) => [
-      id,
-      {
-        ...collection,
-        wallpapers: collection.wallpapers.map(addImageRequire),
-      },
-    ])
-  );
+function buildSourceArtifacts(sourceEntries) {
+  const artifacts = [];
 
-  const nasaCollectionsWithImages = Object.fromEntries(
-    Object.entries(nasaCollections).map(([id, collection]) => [
-      id,
-      {
-        ...collection,
-        wallpapers: collection.wallpapers.map(addImageRequire),
-      },
-    ])
-  );
-
-  // 객체를 문자열로 변환하면서 require를 코드로 처리
-  const stringifyWithRequire = (obj) => {
-    return JSON.stringify(obj, null, 2).replace(
-      /"image": "require\('(.+?)'\)"/g,
-      "image: require('$1')"
+  for (const [sourceId, source] of sourceEntries) {
+    const baseCollections = sortObjectEntries(source.collections).filter(
+      ([collectionId]) => !collectionId.startsWith("all-")
     );
-  };
 
-  // 통계 계산
-  const metTotal = Object.values(metCollections).reduce(
-    (sum, col) => sum + col.wallpapers.length,
-    0
-  );
-  const nasaTotal = Object.values(nasaCollections).reduce(
-    (sum, col) => sum + col.wallpapers.length,
-    0
-  );
+    const wallpaperConstants = [];
+    const collectionRefs = [];
 
-  // 각 컬렉션별 wallpaper 상수 생성
-  const generateWallpaperConstants = (collections) => {
-    return Object.entries(collections)
-      .map(([id, collection]) => {
-        const constantName =
-          id.toUpperCase().replace(/-/g, "_") + "_WALLPAPERS";
-        return `const ${constantName} = ${stringifyWithRequire(
-          collection.wallpapers
-        )};`;
-      })
-      .join("\n\n");
-  };
-
-  const metWallpaperConstants = generateWallpaperConstants(
-    metCollectionsWithImages
-  );
-  const nasaWallpaperConstants = generateWallpaperConstants(
-    nasaCollectionsWithImages
-  );
-
-  // 컬렉션 객체를 상수 참조로 생성 (all 제외)
-  const generateCollectionsWithRefs = (collections) => {
-    // all 컬렉션은 제외 (나중에 명시적으로 마지막에 추가됨)
-    const entries = Object.entries(collections)
-      .filter(([id]) => !id.startsWith("all-"))
-      .map(([id, collection]) => {
-        const constantName =
-          id.toUpperCase().replace(/-/g, "_") + "_WALLPAPERS";
-        return `  "${id}": {
-    "id": "${id}",
-    "name": "${collection.name}",
-    wallpapers: ${constantName}
-  }`;
+    for (const [collectionId, collection] of baseCollections) {
+      const constantName = toConstantName(sourceId, collectionId, "wallpapers");
+      wallpaperConstants.push(
+        `const ${constantName} = ${stringifyWithRequire(collection.wallpapers)};`
+      );
+      collectionRefs.push({
+        id: collectionId,
+        name: collection.name,
+        constantName,
+        wallpaperCount: collection.wallpapers.length,
       });
-    return `{\n${entries.join(",\n")}\n}`;
-  };
+    }
 
-  // all 컬렉션 생성
-  const generateAllCollection = ({ sourceId, sourceName, collections }) => {
-    const collectionIds = Object.keys(collections);
-    const constantNames = collectionIds.map(
-      (id) => id.toUpperCase().replace(/-/g, "_") + "_WALLPAPERS"
-    );
-    const allId = `all-${sourceId}`;
-    const allConstantName =
-      allId.toUpperCase().replace(/-/g, "_") + "_WALLPAPERS";
+    const allCollectionId = `all-${sourceId}`;
+    const allCollectionName = `All ${source.name} Collection`;
+    const allCollectionConstant = toConstantName(allCollectionId, "wallpapers");
 
-    return {
-      constant: `// 중복 ID 제거를 위해 Map 사용
-const ${allConstantName} = Array.from(
+    const mergedConstantLines = collectionRefs
+      .map((ref) => `      ...${ref.constantName}`)
+      .join(",\n");
+
+    wallpaperConstants.push(`const ${allCollectionConstant} = Array.from(
   new Map(
     [
-      ${constantNames.map((name) => `...${name}`).join(",\n      ")}
+${mergedConstantLines}
     ].map((item) => [item.id, item])
   ).values()
-);`,
-      collection: `  "${allId}": {
-    "id": "${allId}",
-    "name": "All ${sourceName} Collection",
-    wallpapers: ${allConstantName}
-  }`,
-    };
-  };
+);`);
 
-  const metAllCollection = generateAllCollection({
-    sourceId: "met",
-    sourceName: "Met",
-    collections: metCollectionsWithImages,
-  });
+    const collectionEntries = [
+      {
+        id: allCollectionId,
+        name: allCollectionName,
+        constantName: allCollectionConstant,
+      },
+      ...collectionRefs,
+    ];
 
-  const nasaAllCollection = generateAllCollection({
-    sourceId: "nasa",
-    sourceName: "NASA",
-    collections: nasaCollectionsWithImages,
-  });
+    const collectionsObjectCode = `{
+${collectionEntries
+  .map(
+    (entry) => `      ${quote(entry.id)}: {
+        id: ${quote(entry.id)},
+        name: ${quote(entry.name)},
+        wallpapers: ${entry.constantName}
+      }`
+  )
+  .join(",\n")}
+    }`;
 
-  // 컬렉션 문자열 생성 (all 컬렉션을 가장 처음에 포함)
-  const generateCollectionsStrWithAll = ({ collections, allCollection }) => {
-    const baseCollections = generateCollectionsWithRefs(collections);
-    // 첫번째 { 다음에 all 컬렉션 추가
-    return baseCollections.replace(/^\{/, `{\n${allCollection.collection},`);
-  };
+    const sourceObjectCode = `  ${sourceId}: {
+    id: ${quote(sourceId)},
+    name: ${quote(source.name)},
+    collections: ${collectionsObjectCode}
+  }`;
 
-  const metCollectionsStr = generateCollectionsStrWithAll({
-    collections: metCollectionsWithImages,
-    allCollection: metAllCollection,
-  });
+    const wallpaperTotal = collectionRefs.reduce(
+      (sum, ref) => sum + ref.wallpaperCount,
+      0
+    );
 
-  const nasaCollectionsStr = generateCollectionsStrWithAll({
-    collections: nasaCollectionsWithImages,
-    allCollection: nasaAllCollection,
-  });
+    artifacts.push({
+      sourceId,
+      sourceName: source.name,
+      collectionCount: collectionRefs.length,
+      wallpaperTotal,
+      wallpaperConstants,
+      sourceObjectCode,
+    });
+  }
 
-  // React Native용 index 파일 생성
-  const code = `// Auto-generated file for React Native compatibility
+  return artifacts;
+}
+
+function buildIndexCode(artifacts) {
+  const sourceIdList = artifacts.map((artifact) => artifact.sourceId);
+  const sourceUnionForDocs =
+    sourceIdList.length > 0
+      ? sourceIdList.map((id) => quote(id)).join(" | ")
+      : "string";
+
+  const constantsSection = artifacts
+    .map((artifact) => {
+      return `// ${artifact.sourceName} Wallpapers\n${artifact.wallpaperConstants.join(
+        "\n\n"
+      )}`;
+    })
+    .join("\n\n");
+
+  const sourcesObjectSection = artifacts
+    .map((artifact) => artifact.sourceObjectCode)
+    .join(",\n");
+
+  return `// Auto-generated file for React Native compatibility
 // Run 'npm run generate:index' to regenerate
 
 /**
@@ -263,7 +285,7 @@ const ${allConstantName} = Array.from(
  * @property {string} title - Wallpaper 제목
  * @property {string} author - 작가명
  * @property {string} year - 제작 연도
- * @property {string} source - 소스 (met/nasa)
+ * @property {string} source - 소스 ID
  * @property {string} collection - 컬렉션 ID
  * @property {string} imagePath - 이미지 경로
  * @property {any} image - React Native require 객체
@@ -283,31 +305,18 @@ const ${allConstantName} = Array.from(
  * @property {Record<string, WallpaperCollection>} collections - 컬렉션 맵
  */
 
-// Met Museum Wallpapers
-${metWallpaperConstants}
+/**
+ * @typedef {${sourceUnionForDocs}} WallpaperSourceId
+ */
 
-${metAllCollection.constant}
-
-// NASA Wallpapers
-${nasaWallpaperConstants}
-
-${nasaAllCollection.constant}
+${constantsSection}
 
 /**
  * 모든 wallpaper 소스 (단일 source of truth)
  * @type {Record<string, WallpaperSource>}
  */
 export const WALLPAPER_SOURCES = {
-  met: {
-    id: "met",
-    name: "The Met Museum",
-    collections: ${metCollectionsStr.replace(/\n/g, "\n    ")},
-  },
-  nasa: {
-    id: "nasa",
-    name: "NASA",
-    collections: ${nasaCollectionsStr.replace(/\n/g, "\n    ")},
-  },
+${sourcesObjectSection}
 };
 
 /**
@@ -320,7 +329,7 @@ export function getSources() {
 
 /**
  * 특정 소스 정보를 반환한다.
- * @param {"met" | "nasa"} sourceId - 소스 ID
+ * @param {string} sourceId - 소스 ID
  * @returns {WallpaperSource | null}
  */
 export function getSource(sourceId) {
@@ -341,19 +350,18 @@ export function getAllCollections() {
 
 /**
  * 특정 소스의 모든 컬렉션을 반환한다. (all 컬렉션은 항상 맨 처음)
- * @param {"met" | "nasa"} sourceId - 소스 ID
+ * @param {string} sourceId - 소스 ID
  * @returns {WallpaperCollection[]}
  */
 export function getCollections(sourceId) {
   const source = WALLPAPER_SOURCES[sourceId];
   if (!source) return [];
-  
+
   const collections = Object.values(source.collections);
-  // all 컬렉션을 맨 앞으로 정렬
   return collections.sort((a, b) => {
-    if (a.id.startsWith('all-')) return -1;
-    if (b.id.startsWith('all-')) return 1;
-    return 0;
+    if (a.id.startsWith("all-")) return -1;
+    if (b.id.startsWith("all-")) return 1;
+    return a.id.localeCompare(b.id);
   });
 }
 
@@ -383,11 +391,11 @@ export function getWallpapers(collectionId) {
 
 /**
  * 특정 소스의 모든 wallpaper를 반환한다.
- * @param {"met" | "nasa"} sourceId - 소스 ID
+ * @param {string} sourceId - 소스 ID
  * @returns {Wallpaper[]}
  */
 export function getWallpapersBySource(sourceId) {
-  return getCollections(sourceId).flatMap((col) => col.wallpapers);
+  return getCollections(sourceId).flatMap((collection) => collection.wallpapers);
 }
 
 /**
@@ -396,7 +404,7 @@ export function getWallpapersBySource(sourceId) {
  */
 export function getAllWallpapers() {
   return Object.values(WALLPAPER_SOURCES).flatMap((source) =>
-    Object.values(source.collections).flatMap((col) => col.wallpapers)
+    Object.values(source.collections).flatMap((collection) => collection.wallpapers)
   );
 }
 
@@ -408,7 +416,7 @@ export function getAllWallpapers() {
 export function getWallpaperById(wallpaperId) {
   for (const source of Object.values(WALLPAPER_SOURCES)) {
     for (const collection of Object.values(source.collections)) {
-      const wallpaper = collection.wallpapers.find((w) => w.id === wallpaperId);
+      const wallpaper = collection.wallpapers.find((item) => item.id === wallpaperId);
       if (wallpaper) return wallpaper;
     }
   }
@@ -419,7 +427,7 @@ export function getWallpaperById(wallpaperId) {
  * 랜덤 wallpaper를 반환한다.
  * @param {Object} [options]
  * @param {string} [options.collectionId] - 특정 컬렉션에서만 선택
- * @param {"met" | "nasa"} [options.sourceId] - 특정 소스에서만 선택
+ * @param {string} [options.sourceId] - 특정 소스에서만 선택
  * @returns {Wallpaper | null}
  */
 export function getRandomWallpaper({ collectionId, sourceId } = {}) {
@@ -439,23 +447,144 @@ export function getRandomWallpaper({ collectionId, sourceId } = {}) {
   return wallpapers[randomIndex];
 }
 `;
+}
 
-  const outputPath = path.join(__dirname, "..", "index.js");
-  await writeFile(outputPath, code, "utf8");
-  console.log("✅ Generated index.js successfully!");
-  console.log(
-    `   - Met: ${
-      Object.keys(metCollections).length
-    } collections + 1 all collection (total ${metTotal} wallpapers)`
-  );
-  console.log(
-    `   - NASA: ${
-      Object.keys(nasaCollections).length
-    } collections + 1 all collection (total ${nasaTotal} wallpapers)`
-  );
-  console.log(
-    `   💡 Each wallpaper is stored once and referenced by collections`
-  );
+function buildTypesCode(sourceIds) {
+  const sourceIdType =
+    sourceIds.length > 0 ? sourceIds.map((id) => quote(id)).join(" | ") : "string";
+
+  return `import type { ImageSourcePropType } from "react-native";
+
+export type WallpaperSourceId = ${sourceIdType};
+
+export interface WallpaperMetadata {
+  id: string;
+  title: string;
+  author: string;
+  titleOriginal?: string;
+  authorOriginal?: string;
+  description: string;
+  year: string;
+  originalImageUrl: string;
+  sourcePage: string;
+  license: string;
+  fetchedFrom: string;
+  sourceCategory: string;
+  categoryLabel: string;
+  fetchedAt: string;
+  [key: string]: unknown;
+}
+
+export interface Wallpaper {
+  id: string;
+  title: string;
+  author: string;
+  year: string;
+  source: WallpaperSourceId;
+  collection: string;
+  imagePath: string;
+  image: ImageSourcePropType;
+}
+
+export interface WallpaperCollection {
+  id: string;
+  name: string;
+  wallpapers: Wallpaper[];
+}
+
+export interface WallpaperSource {
+  id: WallpaperSourceId;
+  name: string;
+  collections: Record<string, WallpaperCollection>;
+}
+
+export interface GetRandomWallpaperOptions {
+  collectionId?: string;
+  sourceId?: string;
+}
+
+/**
+ * 모든 wallpaper 소스 (단일 source of truth)
+ */
+export const WALLPAPER_SOURCES: Record<WallpaperSourceId, WallpaperSource>;
+
+/**
+ * 모든 소스의 정보를 배열로 반환한다.
+ */
+export function getSources(): WallpaperSource[];
+
+/**
+ * 특정 소스 정보를 반환한다.
+ */
+export function getSource(sourceId: string): WallpaperSource | null;
+
+/**
+ * 모든 컬렉션을 flat 구조로 반환한다.
+ */
+export function getAllCollections(): Record<string, WallpaperCollection>;
+
+/**
+ * 특정 소스의 모든 컬렉션을 배열로 반환한다.
+ */
+export function getCollections(sourceId: string): WallpaperCollection[];
+
+/**
+ * 특정 컬렉션을 반환한다.
+ */
+export function getCollection(collectionId: string): WallpaperCollection | null;
+
+/**
+ * 특정 컬렉션의 모든 wallpaper를 반환한다.
+ */
+export function getWallpapers(collectionId: string): Wallpaper[];
+
+/**
+ * 특정 소스의 모든 wallpaper를 반환한다.
+ */
+export function getWallpapersBySource(sourceId: string): Wallpaper[];
+
+/**
+ * 모든 wallpaper를 단일 배열로 반환한다.
+ */
+export function getAllWallpapers(): Wallpaper[];
+
+/**
+ * 특정 wallpaper를 ID로 찾는다.
+ */
+export function getWallpaperById(wallpaperId: string): Wallpaper | null;
+
+/**
+ * 랜덤 wallpaper를 반환한다.
+ */
+export function getRandomWallpaper(
+  options?: GetRandomWallpaperOptions
+): Wallpaper | null;
+`;
+}
+
+async function generateNativeIndex() {
+  const metadataFiles = await listMetadataFiles(METADATA_DIR);
+  const sourceMap = await collectSourcesFromMetadata(metadataFiles);
+  const sourceEntries = sortObjectEntries(sourceMap);
+
+  if (sourceEntries.length === 0) {
+    throw new Error("No metadata files found. Cannot generate index.");
+  }
+
+  const artifacts = buildSourceArtifacts(sourceEntries);
+  const indexCode = buildIndexCode(artifacts);
+  const typesCode = buildTypesCode(sourceEntries.map(([sourceId]) => sourceId));
+
+  await writeFile(INDEX_OUTPUT_PATH, indexCode, "utf8");
+  await writeFile(TYPES_OUTPUT_PATH, typesCode, "utf8");
+
+  console.log("✅ Generated index.js and index.d.ts successfully!");
+  for (const artifact of artifacts) {
+    console.log(
+      `   - ${artifact.sourceName}: ${artifact.collectionCount} collections + 1 all collection (total ${artifact.wallpaperTotal} wallpapers)`
+    );
+  }
+  console.log("   💡 Each wallpaper is stored once and referenced by collections");
 }
 
 generateNativeIndex().catch((error) => {
