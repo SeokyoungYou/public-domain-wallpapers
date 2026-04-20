@@ -113,6 +113,16 @@ const MET_FLORAL_COLLECTION_WALLPAPERS = [
 
 const MET_IMPRESSIONISM_COLLECTION_WALLPAPERS = [
   {
+    "id": "11321",
+    "title": "The Sea",
+    "author": "John Frederick Kensett",
+    "year": "1872",
+    "source": "met",
+    "collection": "met-impressionism-collection",
+    "imagePath": "images-eink/met/met-impressionism-collection/met-11321.webp",
+    image: require('./images-eink/met/met-impressionism-collection/met-11321.webp')
+  },
+  {
     "id": "436441",
     "title": "Wooded Upland Landscape",
     "author": "Thomas Gainsborough",
@@ -267,6 +277,192 @@ const MET_LANDSCAPE_COLLECTION_WALLPAPERS = [
   }
 ];
 
+const MET_OLD_MASTERS_COLLECTION_WALLPAPERS = [
+  {
+    "id": "435848",
+    "title": "The Birth of the Virgin",
+    "author": "Fra Carnevale (Bartolomeo di Giovanni Corradini)",
+    "year": "1467",
+    "source": "met",
+    "collection": "met-old-masters-collection",
+    "imagePath": "images-eink/met/met-old-masters-collection/met-435848.webp",
+    image: require('./images-eink/met/met-old-masters-collection/met-435848.webp')
+  },
+  {
+    "id": "436102",
+    "title": "Virgin and Child with Four Angels",
+    "author": "Gerard David",
+    "year": "ca. 1510–15",
+    "source": "met",
+    "collection": "met-old-masters-collection",
+    "imagePath": "images-eink/met/met-old-masters-collection/met-436102.webp",
+    image: require('./images-eink/met/met-old-masters-collection/met-436102.webp')
+  },
+  {
+    "id": "436122",
+    "title": "The Collector of Prints",
+    "author": "Edgar Degas",
+    "year": "1866",
+    "source": "met",
+    "collection": "met-old-masters-collection",
+    "imagePath": "images-eink/met/met-old-masters-collection/met-436122.webp",
+    image: require('./images-eink/met/met-old-masters-collection/met-436122.webp')
+  },
+  {
+    "id": "436144",
+    "title": "James-Jacques-Joseph Tissot (1836–1902)",
+    "author": "Edgar Degas",
+    "year": "ca. 1867–68",
+    "source": "met",
+    "collection": "met-old-masters-collection",
+    "imagePath": "images-eink/met/met-old-masters-collection/met-436144.webp",
+    image: require('./images-eink/met/met-old-masters-collection/met-436144.webp')
+  },
+  {
+    "id": "436492",
+    "title": "Saint Christopher and the Infant Christ",
+    "author": "Domenico Ghirlandaio (Domenico Bigordi)",
+    "year": "",
+    "source": "met",
+    "collection": "met-old-masters-collection",
+    "imagePath": "images-eink/met/met-old-masters-collection/met-436492.webp",
+    image: require('./images-eink/met/met-old-masters-collection/met-436492.webp')
+  },
+  {
+    "id": "437756",
+    "title": "The Japanese Robe",
+    "author": "Alfred Stevens",
+    "year": "ca. 1872",
+    "source": "met",
+    "collection": "met-old-masters-collection",
+    "imagePath": "images-eink/met/met-old-masters-collection/met-437756.webp",
+    image: require('./images-eink/met/met-old-masters-collection/met-437756.webp')
+  },
+  {
+    "id": "438490",
+    "title": "Interior of the Oude Kerk, Delft",
+    "author": "Emanuel de Witte",
+    "year": "probably 1650",
+    "source": "met",
+    "collection": "met-old-masters-collection",
+    "imagePath": "images-eink/met/met-old-masters-collection/met-438490.webp",
+    image: require('./images-eink/met/met-old-masters-collection/met-438490.webp')
+  },
+  {
+    "id": "53427",
+    "title": "Six Jewel Rivers",
+    "author": "Sakai Ōho",
+    "year": "ca. 1839",
+    "source": "met",
+    "collection": "met-old-masters-collection",
+    "imagePath": "images-eink/met/met-old-masters-collection/met-53427.webp",
+    image: require('./images-eink/met/met-old-masters-collection/met-53427.webp')
+  },
+  {
+    "id": "53449",
+    "title": "Six Jewel Rivers from Various Provinces",
+    "author": "Utagawa Hiroshige",
+    "year": "1857",
+    "source": "met",
+    "collection": "met-old-masters-collection",
+    "imagePath": "images-eink/met/met-old-masters-collection/met-53449.webp",
+    image: require('./images-eink/met/met-old-masters-collection/met-53449.webp')
+  }
+];
+
+const MET_PORTRAIT_FIGURE_COLLECTION_WALLPAPERS = [
+  {
+    "id": "372898",
+    "title": "Draped Figure Reclining",
+    "author": "James McNeill Whistler",
+    "year": "1892",
+    "source": "met",
+    "collection": "met-portrait-figure-collection",
+    "imagePath": "images-eink/met/met-portrait-figure-collection/met-372898.webp",
+    image: require('./images-eink/met/met-portrait-figure-collection/met-372898.webp')
+  },
+  {
+    "id": "436543",
+    "title": "Josefa de Castilla Portugal y van Asbrock de Garcini (1775–about 1850)",
+    "author": "Goya (Francisco de Goya y Lucientes)",
+    "year": "1804",
+    "source": "met",
+    "collection": "met-portrait-figure-collection",
+    "imagePath": "images-eink/met/met-portrait-figure-collection/met-436543.webp",
+    image: require('./images-eink/met/met-portrait-figure-collection/met-436543.webp')
+  },
+  {
+    "id": "436545",
+    "title": "Manuel Osorio Manrique de Zuñiga (1784–1792)",
+    "author": "Goya (Francisco de Goya y Lucientes)",
+    "year": "1787–88",
+    "source": "met",
+    "collection": "met-portrait-figure-collection",
+    "imagePath": "images-eink/met/met-portrait-figure-collection/met-436545.webp",
+    image: require('./images-eink/met/met-portrait-figure-collection/met-436545.webp')
+  },
+  {
+    "id": "437056",
+    "title": "Tommaso di Folco Portinari (1428–1501); Maria Portinari (Maria Maddalena Baroncelli, born 1456)",
+    "author": "Hans Memling",
+    "year": "ca. 1470",
+    "source": "met",
+    "collection": "met-portrait-figure-collection",
+    "imagePath": "images-eink/met/met-portrait-figure-collection/met-437056.webp",
+    image: require('./images-eink/met/met-portrait-figure-collection/met-437056.webp')
+  },
+  {
+    "id": "438815",
+    "title": "Madame Georges Charpentier (Marguerite-Louise Lemonnier, 1848–1904) and Her Children, Georgette-Berthe (1872–1945) and Paul-Emile-Charles (1875–1895)",
+    "author": "Auguste Renoir",
+    "year": "1878",
+    "source": "met",
+    "collection": "met-portrait-figure-collection",
+    "imagePath": "images-eink/met/met-portrait-figure-collection/met-438815.webp",
+    image: require('./images-eink/met/met-portrait-figure-collection/met-438815.webp')
+  },
+  {
+    "id": "459027",
+    "title": "Portrait of a Woman, Possibly a Nun of San Secondo; (verso) Scene in Grisaille",
+    "author": "Jacometto (Jacometto Veneziano)",
+    "year": "ca. 1485–95",
+    "source": "met",
+    "collection": "met-portrait-figure-collection",
+    "imagePath": "images-eink/met/met-portrait-figure-collection/met-459027.webp",
+    image: require('./images-eink/met/met-portrait-figure-collection/met-459027.webp')
+  },
+  {
+    "id": "459028",
+    "title": "Portrait of Alvise Contarini(?); (verso) A Tethered Roebuck",
+    "author": "Jacometto (Jacometto Veneziano)",
+    "year": "ca. 1485–95",
+    "source": "met",
+    "collection": "met-portrait-figure-collection",
+    "imagePath": "images-eink/met/met-portrait-figure-collection/met-459028.webp",
+    image: require('./images-eink/met/met-portrait-figure-collection/met-459028.webp')
+  },
+  {
+    "id": "643540",
+    "title": "Portrait of a Woman",
+    "author": "Giovanni Battista Gaulli (Il Baciccio)",
+    "year": "ca. 1670s",
+    "source": "met",
+    "collection": "met-portrait-figure-collection",
+    "imagePath": "images-eink/met/met-portrait-figure-collection/met-643540.webp",
+    image: require('./images-eink/met/met-portrait-figure-collection/met-643540.webp')
+  },
+  {
+    "id": "824771",
+    "title": "Marie Antoinette in a Park",
+    "author": "Elisabeth Louise Vigée Le Brun",
+    "year": "ca. 1780–81",
+    "source": "met",
+    "collection": "met-portrait-figure-collection",
+    "imagePath": "images-eink/met/met-portrait-figure-collection/met-824771.webp",
+    image: require('./images-eink/met/met-portrait-figure-collection/met-824771.webp')
+  }
+];
+
 const MET_SEASCAPE_COLLECTION_WALLPAPERS = [
   {
     "id": "11321",
@@ -357,6 +553,8 @@ const ALL_MET_WALLPAPERS = Array.from(
       ...MET_FLORAL_COLLECTION_WALLPAPERS,
       ...MET_IMPRESSIONISM_COLLECTION_WALLPAPERS,
       ...MET_LANDSCAPE_COLLECTION_WALLPAPERS,
+      ...MET_OLD_MASTERS_COLLECTION_WALLPAPERS,
+      ...MET_PORTRAIT_FIGURE_COLLECTION_WALLPAPERS,
       ...MET_SEASCAPE_COLLECTION_WALLPAPERS
     ].map((item) => [item.id, item])
   ).values()
@@ -791,6 +989,16 @@ export const WALLPAPER_SOURCES = {
         "id": "met-landscape-collection",
         "name": "Landscape Collection",
         wallpapers: MET_LANDSCAPE_COLLECTION_WALLPAPERS
+      },
+      "met-old-masters-collection": {
+        "id": "met-old-masters-collection",
+        "name": "Old Masters Collection",
+        wallpapers: MET_OLD_MASTERS_COLLECTION_WALLPAPERS
+      },
+      "met-portrait-figure-collection": {
+        "id": "met-portrait-figure-collection",
+        "name": "Portrait & Figure Collection",
+        wallpapers: MET_PORTRAIT_FIGURE_COLLECTION_WALLPAPERS
       },
       "met-seascape-collection": {
         "id": "met-seascape-collection",

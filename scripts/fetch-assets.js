@@ -788,7 +788,12 @@ async function run() {
       const metadataDir = path.join(METADATA_ROOT, sourceKey, categoryId);
       await Promise.all([ensureDir(imageDir), ensureDir(metadataDir)]);
 
-      const offset = await countMetadataFiles(metadataDir);
+      const hasExplicitIds =
+        (Array.isArray(category.objectIds) && category.objectIds.length > 0) ||
+        (Array.isArray(category.nasaIds) && category.nasaIds.length > 0);
+      const offset = hasExplicitIds
+        ? 0
+        : await countMetadataFiles(metadataDir);
 
       console.log(
         `\n[${sourceKey}] ${categoryLabel}: fetching up to ${categoryLimit} items (offset ${offset})`

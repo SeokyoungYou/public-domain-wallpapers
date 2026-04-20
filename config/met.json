@@ -4,18 +4,16 @@
       "id": "met-landscape-collection",
       "name": "Landscape Collection",
       "objectIds": [
-        "437107",
         "436455",
         "437191",
         "436441",
         "436831",
         "45650",
-        "438622",
         "10793",
         "435907",
         "437323"
       ],
-      "limit": 11
+      "limit": 8
     },
     {
       "id": "met-seascape-collection",
@@ -24,15 +22,13 @@
         "437853",
         "11321",
         "436005",
-        "442986",
-        "690286",
         "261941",
         "435570",
         "15370",
         "15374",
         "15379"
       ],
-      "limit": 10
+      "limit": 8
     },
     {
       "id": "met-floral-collection",
@@ -54,18 +50,47 @@
       "name": "Impressionism Collection",
       "objectIds": [
         "436965",
-        "437107",
         "437191",
         "436831",
-        "438622",
         "436441",
-        "11321",
         "438031",
-        "483494",
         "436525",
-        "437382"
+        "437382",
+        "11321"
       ],
-      "limit": 11
+      "limit": 8
+    },
+    {
+      "id": "met-portrait-figure-collection",
+      "name": "Portrait & Figure Collection",
+      "objectIds": [
+        "437056",
+        "459027",
+        "459028",
+        "436543",
+        "436545",
+        "643540",
+        "824771",
+        "372898",
+        "438815"
+      ],
+      "limit": 9
+    },
+    {
+      "id": "met-old-masters-collection",
+      "name": "Old Masters Collection",
+      "objectIds": [
+        "435848",
+        "436492",
+        "436102",
+        "438490",
+        "437756",
+        "436122",
+        "436144",
+        "53449",
+        "53427"
+      ],
+      "limit": 9
     }
   ]
 }
