@@ -12,9 +12,19 @@
         "PIA17553",
         "PIA14091",
         "PIA23646",
-        "PIA04921"
+        "PIA04921",
+        "GSFC_20171208_Archive_e001464",
+        "GSFC_20171208_Archive_e001955",
+        "GSFC_20171208_Archive_e000699",
+        "GSFC_20171208_Archive_e001743",
+        "PIA03606",
+        "PIA04216",
+        "GSFC_20171208_Archive_e002076",
+        "PIA04226",
+        "PIA17563",
+        "PIA14442"
       ],
-      "limit": 9
+      "limit": 19
     },
     {
       "id": "nasa-solar-system-collection",
@@ -33,6 +43,21 @@
         "PIA03149"
       ],
       "limit": 11
+    },
+    {
+      "id": "nasa-earth-orbit-collection",
+      "name": "Earth Orbit",
+      "nasaIds": [
+        "iss045e013851",
+        "iss043e003041",
+        "iss040e007403",
+        "S39-23-036",
+        "S39-25-006",
+        "S39-23-020",
+        "sl4-143-4707",
+        "sl4-143-4706"
+      ],
+      "limit": 8
     }
   ]
 }
