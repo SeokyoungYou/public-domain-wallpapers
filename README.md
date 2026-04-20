@@ -11,7 +11,8 @@ npm install public-domain-wallpapers
 ## Package Contents
 
 - `images-eink/`: Grayscale/e-ink friendly WebP wallpapers created with `npm run optimize:eink` (these are the only image assets shipped to npm).
-- `metadata/`: Per wallpaper JSON records (`id`, `title`, `author`, `description`, `year`, `originalImageUrl`, `sourcePage`, `license`, etc.).
+- `metadata/`: Per wallpaper JSON records (`id`, `title`, `author`, `description`, `year`, `originalImageUrl`, `sourcePage`, `license`, etc.).  
+  If the source text is non-English, the original fields are additionally stored as `titleOriginal` / `authorOriginal`.
 - `index.js`: Placeholder module for future aggregated exports (today you consume the metadata files directly).
 
 Only the optimised asset folders listed above are included when you install the package. Colour masters that live under `images/` in the git repository are treated as working files and are excluded from the published tarball via the `files` allowlist in `package.json`.

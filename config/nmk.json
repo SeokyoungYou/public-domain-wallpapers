@@ -1,0 +1,79 @@
+{
+  "categories": [
+    {
+      "id": "nmk-buddhist-sculpture-collection",
+      "name": "Korean Buddhist Sculpture",
+      "relicIds": [
+        "330",
+        "335",
+        "669",
+        "338",
+        "339",
+        "347",
+        "348",
+        "349",
+        "477",
+        "510",
+        "583",
+        "664"
+      ],
+      "limit": 12
+    },
+    {
+      "id": "nmk-korean-painting-collection",
+      "name": "Korean Painting",
+      "relicIds": [
+        "331",
+        "332",
+        "529",
+        "357",
+        "363",
+        "373",
+        "387",
+        "656",
+        "496",
+        "501",
+        "660"
+      ],
+      "limit": 12
+    },
+    {
+      "id": "nmk-korean-metalcraft-collection",
+      "name": "Korean Metalcraft",
+      "relicIds": [
+        "378",
+        "379",
+        "380",
+        "381",
+        "620",
+        "383",
+        "638",
+        "628",
+        "629",
+        "618",
+        "625",
+        "630"
+      ],
+      "limit": 12
+    },
+    {
+      "id": "nmk-ancient-pottery-collection",
+      "name": "Ancient Pottery",
+      "relicIds": [
+        "484",
+        "350",
+        "351",
+        "353",
+        "354",
+        "355",
+        "358",
+        "360",
+        "361",
+        "371",
+        "482",
+        "483"
+      ],
+      "limit": 12
+    }
+  ]
+}

@@ -2,6 +2,24 @@ import type { ImageSourcePropType } from "react-native";
 
 export type WallpaperSourceId = "met" | "nasa";
 
+export interface WallpaperMetadata {
+  id: string;
+  title: string;
+  author: string;
+  titleOriginal?: string;
+  authorOriginal?: string;
+  description: string;
+  year: string;
+  originalImageUrl: string;
+  sourcePage: string;
+  license: string;
+  fetchedFrom: string;
+  sourceCategory: string;
+  categoryLabel: string;
+  fetchedAt: string;
+  [key: string]: unknown;
+}
+
 export interface Wallpaper {
   id: string;
   title: string;

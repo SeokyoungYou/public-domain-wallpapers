@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fetch from "node-fetch";
 import sharp from "sharp";
+import { getLocalizedMetadataFields } from "./lib/metadata-language.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,6 +15,7 @@ const CONFIG_ROOT = path.join(PROJECT_ROOT, "config");
 const IGNORE_FILE = path.join(CONFIG_ROOT, "ignored-assets.json");
 
 const DEFAULT_LIMIT = 5;
+const DEFAULT_MAX_SAME_TITLE = 2;
 const NASA_PAGE_SIZE = 100;
 let IGNORE_SETS = {};
 
@@ -366,6 +368,74 @@ const SOURCE_CONFIG = {
       return { items: results, nextOffset };
     },
   },
+  nmk: {
+    label: "National Museum of Korea Collection",
+    license: "KOGL Type 1 (Attribution)",
+    configFile: path.join(CONFIG_ROOT, "nmk.json"),
+    async fetchBatch({ limit, offset, category }) {
+      const sourceKey = "nmk";
+      const relicIds = Array.isArray(category.relicIds)
+        ? category.relicIds.map((value) => String(value).trim()).filter(Boolean)
+        : [];
+
+      if (relicIds.length === 0) {
+        return { items: [], nextOffset: offset };
+      }
+
+      if (offset >= relicIds.length) {
+        return { items: [], nextOffset: relicIds.length };
+      }
+
+      const results = [];
+      let nextOffset = offset;
+
+      for (
+        let index = offset;
+        index < relicIds.length && results.length < limit;
+        index += 1
+      ) {
+        const relicId = relicIds[index];
+
+        if (shouldIgnore(sourceKey, relicId)) {
+          console.log(`[${sourceKey}] Ignoring relic ${relicId} via ignore list`);
+          nextOffset = index + 1;
+          continue;
+        }
+
+        const storageKey = makeStorageKey(sourceKey, relicId);
+        const imagePath = path.join(
+          IMAGE_ROOT,
+          sourceKey,
+          category.id,
+          `${storageKey}.webp`
+        );
+        const metadataPath = path.join(
+          METADATA_ROOT,
+          sourceKey,
+          category.id,
+          `${storageKey}.json`
+        );
+
+        if ((await fileExists(imagePath)) && (await fileExists(metadataPath))) {
+          console.log(`[${sourceKey}] Skipping cached relic ${relicId}`);
+          nextOffset = index + 1;
+          continue;
+        }
+
+        const item = await fetchNmkItemById(relicId);
+        nextOffset = index + 1;
+
+        if (!item) continue;
+        results.push({
+          id: relicId,
+          storageKey,
+          ...item,
+        });
+      }
+
+      return { items: results, nextOffset };
+    },
+  },
 };
 
 async function resolveNasaAssetUrl(item) {
@@ -418,6 +488,123 @@ async function fetchNasaItemById(nasaId) {
   if (!assetUrl) return null;
 
   return { metadata, assetUrl };
+}
+
+function decodeHtml(text) {
+  if (!text) return "";
+
+  return text
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function extractNmkField(html, label) {
+  const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const pattern = new RegExp(
+    `<li><strong>${escaped}</strong>[\\s\\S]*?<p>([\\s\\S]*?)<\\/p>`,
+    "i"
+  );
+  const match = html.match(pattern);
+  if (!match) return "";
+  return decodeHtml(match[1].replace(/<[^>]+>/g, " "));
+}
+
+function normalizeNmkImageUrl(rawPath) {
+  if (!rawPath) return "";
+
+  let normalized = rawPath.trim();
+  if (normalized.startsWith("http://") || normalized.startsWith("https://")) {
+    return normalized;
+  }
+
+  normalized = normalized.replace(/^\/relic_image\/\//, "/relic_image/");
+  normalized = normalized.replace("/700/", "/");
+
+  if (!normalized.startsWith("/")) {
+    normalized = `/${normalized}`;
+  }
+
+  return `https://www.museum.go.kr${normalized}`;
+}
+
+async function fetchNmkItemById(relicId) {
+  const detailUrl = `https://www.museum.go.kr/MUSEUM/contents/M0502000000.do?schM=view&searchId=search&relicId=${encodeURIComponent(
+    relicId
+  )}`;
+  const response = await fetch(detailUrl);
+
+  if (!response.ok) {
+    console.warn(`Failed to fetch NMK relic ${relicId}: ${response.status}`);
+    return null;
+  }
+
+  const html = await response.text();
+
+  const isKoglType1 =
+    /new_img_opencode1\.jpg/i.test(html) || /licenseType1\.do/i.test(html);
+
+  if (!isKoglType1) {
+    console.warn(
+      `[nmk] relic ${relicId} is not KOGL type 1. Skipping for commercial-safe collection.`
+    );
+    return null;
+  }
+
+  const title =
+    decodeHtml((html.match(/class="outveiw-tit">([\s\S]*?)<\/strong>/i) || [])[1]) ||
+    `국립중앙박물관 소장품 ${relicId}`;
+
+  const nationEra = extractNmkField(html, "국적/시대");
+  const material = extractNmkField(html, "재질");
+  const classification = extractNmkField(html, "분류");
+  const size = extractNmkField(html, "크기");
+  const relicNo = extractNmkField(html, "소장품번호");
+
+  const bodyTextRaw = (
+    html.match(
+      /<div class="view-info-cont view-info-cont2">[\s\S]*?<p>([\s\S]*?)<\/p>/i
+    ) || []
+  )[1];
+  const bodyText = decodeHtml((bodyTextRaw || "").replace(/<[^>]+>/g, " "));
+
+  const imagePath = (
+    html.match(/<img src="(\/relic_image[^"]+\.jpg)"/i) || []
+  )[1];
+  const imageUrl = normalizeNmkImageUrl(imagePath);
+
+  if (!imageUrl) {
+    console.warn(`[nmk] relic ${relicId} has no downloadable image URL.`);
+    return null;
+  }
+
+  const descriptionParts = [bodyText, material, classification, size]
+    .map((value) => value.trim())
+    .filter(Boolean);
+
+  const description = descriptionParts.join(" | ");
+
+  return {
+    title,
+    author: nationEra || "국립중앙박물관",
+    description,
+    year: "",
+    imageUrl,
+    sourceUrl: detailUrl,
+    license: "KOGL Type 1 (Attribution)",
+    extraMetadata: {
+      relicNo,
+      nationEra,
+      material,
+      classification,
+      size,
+    },
+  };
 }
 
 function parseArgs() {
@@ -555,8 +742,11 @@ async function loadSourceCategories(sourceKey) {
       const hasNasaIds =
         Array.isArray(category.nasaIds) &&
         category.nasaIds.some((value) => String(value).trim().length > 0);
+      const hasRelicIds =
+        Array.isArray(category.relicIds) &&
+        category.relicIds.some((value) => String(value).trim().length > 0);
 
-      if (!hasQuery && !hasObjectIds && !hasNasaIds) {
+      if (!hasQuery && !hasObjectIds && !hasNasaIds && !hasRelicIds) {
         console.warn(
           `Skipping ${sourceKey} category without query or IDs at index ${index}`
         );
@@ -681,6 +871,55 @@ function makeStorageKey(sourceKey, id) {
   return sanitizeFileName(`${sourceKey}-${idPart}`);
 }
 
+function normalizeTitleForGrouping(title) {
+  return String(title ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
+
+function applyTitleDiversity(items, maxSameTitle) {
+  if (!Number.isFinite(maxSameTitle)) {
+    return {
+      filteredItems: items,
+      skippedCount: 0,
+    };
+  }
+
+  const limit = Math.max(1, Math.floor(maxSameTitle));
+  const titleCounts = new Map();
+  const filteredItems = [];
+  let skippedCount = 0;
+
+  for (const item of items) {
+    const titleKey = normalizeTitleForGrouping(item.title);
+    const currentCount = titleCounts.get(titleKey) ?? 0;
+
+    if (titleKey && currentCount >= limit) {
+      skippedCount += 1;
+      continue;
+    }
+
+    filteredItems.push(item);
+    if (titleKey) {
+      titleCounts.set(titleKey, currentCount + 1);
+    }
+  }
+
+  return {
+    filteredItems,
+    skippedCount,
+  };
+}
+
+function resolveMaxSameTitle(category) {
+  const configured = Number(category?.maxSameTitle);
+  if (Number.isFinite(configured)) {
+    return Math.max(1, Math.floor(configured));
+  }
+  return DEFAULT_MAX_SAME_TITLE;
+}
+
 async function downloadAndConvert({
   sourceKey,
   categoryId,
@@ -734,13 +973,26 @@ async function downloadAndConvert({
   }
 
   if (!metadataExists || !imageExists) {
+    const localizedFields = getLocalizedMetadataFields({
+      sourceKey,
+      id: item.id,
+      title: item.title,
+      author: item.author,
+    });
+
     await writeFile(
       metadataPath,
       JSON.stringify(
         {
           id: item.id,
-          title: item.title,
-          author: item.author,
+          title: localizedFields.title,
+          author: localizedFields.author,
+          ...(localizedFields.titleOriginal
+            ? { titleOriginal: localizedFields.titleOriginal }
+            : {}),
+          ...(localizedFields.authorOriginal
+            ? { authorOriginal: localizedFields.authorOriginal }
+            : {}),
           description: item.description,
           year: item.year,
           originalImageUrl: item.imageUrl,
@@ -750,6 +1002,7 @@ async function downloadAndConvert({
           sourceCategory: categoryId,
           categoryLabel,
           fetchedAt: new Date().toISOString(),
+          ...(item.extraMetadata ?? {}),
         },
         null,
         2
@@ -790,7 +1043,8 @@ async function run() {
 
       const hasExplicitIds =
         (Array.isArray(category.objectIds) && category.objectIds.length > 0) ||
-        (Array.isArray(category.nasaIds) && category.nasaIds.length > 0);
+        (Array.isArray(category.nasaIds) && category.nasaIds.length > 0) ||
+        (Array.isArray(category.relicIds) && category.relicIds.length > 0);
       const offset = hasExplicitIds
         ? 0
         : await countMetadataFiles(metadataDir);
@@ -810,8 +1064,20 @@ async function run() {
         `[${sourceKey}] ${categoryLabel}: received ${items.length} candidates`
       );
 
+      const maxSameTitle = resolveMaxSameTitle(category);
+      const { filteredItems, skippedCount } = applyTitleDiversity(
+        items,
+        maxSameTitle
+      );
+
+      if (skippedCount > 0) {
+        console.log(
+          `[${sourceKey}] ${categoryLabel}: skipped ${skippedCount} candidates by title diversity (maxSameTitle=${maxSameTitle})`
+        );
+      }
+
       let savedCount = 0;
-      for (const item of items) {
+      for (const item of filteredItems) {
         try {
           const saved = await downloadAndConvert({
             sourceKey,

@@ -26,7 +26,7 @@ Each category should look like:
 Rules:
 - Keep IDs unique within the category.
 - If you append new IDs to an existing collection, increase `limit` to include all intended IDs.
-- Keep each collection at **12 images max** (`limit <= 12`).
+- Keep each collection between **8 and 12 images** (`8 <= limit <= 12`).
 
 ### MET
 Edit `config/met.json`.
@@ -38,7 +38,7 @@ Include:
 - `id`, `name`, and `limit`
 
 Rules:
-- Keep each collection at **12 images max** (`limit <= 12`).
+- Keep each collection between **8 and 12 images** (`8 <= limit <= 12`).
 - Keep `objectIds` unique within a category.
 - Do not reuse the same MET object (or same rendered image) across different MET collections.
 - If an artwork fits multiple themes, assign it to exactly one canonical collection and fill other collections with different IDs.
@@ -55,6 +55,8 @@ What this does:
 - downloads source images
 - converts to WebP under `images/...`
 - writes metadata JSON under `metadata/...`
+  - `title` / `author` are saved as English
+  - if original text is non-English, `titleOriginal` / `authorOriginal` are also saved
 
 ## 3) Generate E-Ink Variants
 Regenerate optimized images for the updated source.
@@ -62,6 +64,13 @@ Regenerate optimized images for the updated source.
 ```bash
 node scripts/optimize-eink-images.js --input images/nasa --output images-eink/nasa
 node scripts/optimize-eink-images.js --input images/met --output images-eink/met
+```
+
+## 3.5) Apply Language Normalization to Existing Metadata (Optional)
+When you need to backfill existing files so that `title`/`author` stay English and original text is preserved:
+
+```bash
+node scripts/apply-metadata-language.js --sources nmk
 ```
 
 ## 4) Regenerate Native Index
