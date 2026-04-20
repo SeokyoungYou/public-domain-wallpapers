@@ -65,6 +65,37 @@
         "sl4-143-4706"
       ],
       "limit": 8
+    },
+    {
+      "id": "nasa-apollo-legacy-collection",
+      "name": "Apollo Legacy",
+      "nasaIds": [
+        "as17-152-23272",
+        "as17-152-23311",
+        "as17-148-22727",
+        "as17-140-21496",
+        "as11-40-5873",
+        "as11-40-5874",
+        "as10-27-3956",
+        "KSC-20220508-PH-SNQ01_0001"
+      ],
+      "limit": 8
+    },
+    {
+      "id": "nasa-space-shuttle-launch-collection",
+      "name": "Space Shuttle Launches",
+      "nasaIds": [
+        "S83-39238",
+        "200903110001HQ",
+        "ED05-0166-06",
+        "S90-48650",
+        "51d-9088",
+        "s38-s-027",
+        "sts076-370-020",
+        "S81-30746"
+      ],
+      "limit": 8,
+      "maxSameTitle": 1
     }
   ]
 }

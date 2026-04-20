@@ -581,6 +581,89 @@ const ALL_MET_WALLPAPERS = Array.from(
 );
 
 // NASA Wallpapers
+const NASA_APOLLO_LEGACY_COLLECTION_WALLPAPERS = [
+  {
+    "id": "as10-27-3956",
+    "title": "Photograph of moon after transearth insertion",
+    "author": "NASA",
+    "year": "1969",
+    "source": "nasa",
+    "collection": "nasa-apollo-legacy-collection",
+    "imagePath": "images-eink/nasa/nasa-apollo-legacy-collection/nasa-as10-27-3956.webp",
+    image: require('./images-eink/nasa/nasa-apollo-legacy-collection/nasa-as10-27-3956.webp')
+  },
+  {
+    "id": "as11-40-5873",
+    "title": "Apollo 11 Mission image - Astronaut Edwin Aldrin stands beside t",
+    "author": "NASA",
+    "year": "1969",
+    "source": "nasa",
+    "collection": "nasa-apollo-legacy-collection",
+    "imagePath": "images-eink/nasa/nasa-apollo-legacy-collection/nasa-as11-40-5873.webp",
+    image: require('./images-eink/nasa/nasa-apollo-legacy-collection/nasa-as11-40-5873.webp')
+  },
+  {
+    "id": "as11-40-5874",
+    "title": "Apollo 11 Mission image - Astronaut Edwin Aldrin poses beside th",
+    "author": "NASA",
+    "year": "1969",
+    "source": "nasa",
+    "collection": "nasa-apollo-legacy-collection",
+    "imagePath": "images-eink/nasa/nasa-apollo-legacy-collection/nasa-as11-40-5874.webp",
+    image: require('./images-eink/nasa/nasa-apollo-legacy-collection/nasa-as11-40-5874.webp')
+  },
+  {
+    "id": "as17-140-21496",
+    "title": "Astronaut Harrison Schmitt standing next to boulder during third EVA",
+    "author": "NASA",
+    "year": "1972",
+    "source": "nasa",
+    "collection": "nasa-apollo-legacy-collection",
+    "imagePath": "images-eink/nasa/nasa-apollo-legacy-collection/nasa-as17-140-21496.webp",
+    image: require('./images-eink/nasa/nasa-apollo-legacy-collection/nasa-as17-140-21496.webp')
+  },
+  {
+    "id": "as17-148-22727",
+    "title": "View of the Earth seen by the Apollo 17 crew traveling toward the moon",
+    "author": "NASA",
+    "year": "1972",
+    "source": "nasa",
+    "collection": "nasa-apollo-legacy-collection",
+    "imagePath": "images-eink/nasa/nasa-apollo-legacy-collection/nasa-as17-148-22727.webp",
+    image: require('./images-eink/nasa/nasa-apollo-legacy-collection/nasa-as17-148-22727.webp')
+  },
+  {
+    "id": "as17-152-23272",
+    "title": "Apollo 17, Earthrise over Moon",
+    "author": "NASA",
+    "year": "1972",
+    "source": "nasa",
+    "collection": "nasa-apollo-legacy-collection",
+    "imagePath": "images-eink/nasa/nasa-apollo-legacy-collection/nasa-as17-152-23272.webp",
+    image: require('./images-eink/nasa/nasa-apollo-legacy-collection/nasa-as17-152-23272.webp')
+  },
+  {
+    "id": "as17-152-23311",
+    "title": "Full disc of moon photographed by Apollo 17 crewmen during transearth coast",
+    "author": "NASA",
+    "year": "1972",
+    "source": "nasa",
+    "collection": "nasa-apollo-legacy-collection",
+    "imagePath": "images-eink/nasa/nasa-apollo-legacy-collection/nasa-as17-152-23311.webp",
+    image: require('./images-eink/nasa/nasa-apollo-legacy-collection/nasa-as17-152-23311.webp')
+  },
+  {
+    "id": "KSC-20220508-PH-SNQ01_0001",
+    "title": "Apollo 15 Landing Site: Hadley - Apennine region of the Moon",
+    "author": "NASA/Shawn Quinn",
+    "year": "2022",
+    "source": "nasa",
+    "collection": "nasa-apollo-legacy-collection",
+    "imagePath": "images-eink/nasa/nasa-apollo-legacy-collection/nasa-ksc-20220508-ph-snq01_0001.webp",
+    image: require('./images-eink/nasa/nasa-apollo-legacy-collection/nasa-ksc-20220508-ph-snq01_0001.webp')
+  }
+];
+
 const NASA_DEEP_SPACE_COLLECTION_WALLPAPERS = [
   {
     "id": "PIA03606",
@@ -973,14 +1056,99 @@ const NASA_SOLAR_SYSTEM_COLLECTION_WALLPAPERS = [
   }
 ];
 
+const NASA_SPACE_SHUTTLE_LAUNCH_COLLECTION_WALLPAPERS = [
+  {
+    "id": "200903110001HQ",
+    "title": "STS-119 Shuttle Discovery With Moon",
+    "author": "NASA/Bill Ingalls",
+    "year": "2009",
+    "source": "nasa",
+    "collection": "nasa-space-shuttle-launch-collection",
+    "imagePath": "images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-200903110001hq.webp",
+    image: require('./images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-200903110001hq.webp')
+  },
+  {
+    "id": "51d-9088",
+    "title": "View of the shuttle Discovery on the launch pad just prior to STS 51-D launch",
+    "author": "NASA",
+    "year": "1985",
+    "source": "nasa",
+    "collection": "nasa-space-shuttle-launch-collection",
+    "imagePath": "images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-51d-9088.webp",
+    image: require('./images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-51d-9088.webp')
+  },
+  {
+    "id": "ED05-0166-06",
+    "title": "The sun rises on the Space Shuttle Discovery as it rests on the runway at Edwards Air Force Base, California, after a safe landing August 9, 2005",
+    "author": "NASA/Carla Thomas",
+    "year": "2005",
+    "source": "nasa",
+    "collection": "nasa-space-shuttle-launch-collection",
+    "imagePath": "images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-ed05-0166-06.webp",
+    image: require('./images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-ed05-0166-06.webp')
+  },
+  {
+    "id": "s38-s-027",
+    "title": "STS-38 Atlantis, OV-104, lifting off from KSC LC Pad during night launch",
+    "author": "NASA",
+    "year": "1990",
+    "source": "nasa",
+    "collection": "nasa-space-shuttle-launch-collection",
+    "imagePath": "images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-s38-s-027.webp",
+    image: require('./images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-s38-s-027.webp')
+  },
+  {
+    "id": "S81-30746",
+    "title": "SPACE SHUTTLE ORBITER COLUMBIA - TOUCHDOWN - EDWARDS AFB (EAFB), CA",
+    "author": "NASA",
+    "year": "1981",
+    "source": "nasa",
+    "collection": "nasa-space-shuttle-launch-collection",
+    "imagePath": "images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-s81-30746.webp",
+    image: require('./images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-s81-30746.webp')
+  },
+  {
+    "id": "S83-39238",
+    "title": "STS-8 Challenger's roll-out to launch pad",
+    "author": "NASA",
+    "year": "1983",
+    "source": "nasa",
+    "collection": "nasa-space-shuttle-launch-collection",
+    "imagePath": "images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-s83-39238.webp",
+    image: require('./images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-s83-39238.webp')
+  },
+  {
+    "id": "S90-48650",
+    "title": "Rare view of two space shuttles on adjacent KSC Launch Complex (LC) 39 pads",
+    "author": "NASA",
+    "year": "1990",
+    "source": "nasa",
+    "collection": "nasa-space-shuttle-launch-collection",
+    "imagePath": "images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-s90-48650.webp",
+    image: require('./images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-s90-48650.webp')
+  },
+  {
+    "id": "sts076-370-020",
+    "title": "View of the shuttle orbiter Atlantis from the Mir Space Station",
+    "author": "NASA",
+    "year": "1996",
+    "source": "nasa",
+    "collection": "nasa-space-shuttle-launch-collection",
+    "imagePath": "images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-sts076-370-020.webp",
+    image: require('./images-eink/nasa/nasa-space-shuttle-launch-collection/nasa-sts076-370-020.webp')
+  }
+];
+
 // 중복 ID 제거를 위해 Map 사용
 const ALL_NASA_WALLPAPERS = Array.from(
   new Map(
     [
+      ...NASA_APOLLO_LEGACY_COLLECTION_WALLPAPERS,
       ...NASA_DEEP_SPACE_COLLECTION_WALLPAPERS,
       ...NASA_EARTH_ORBIT_COLLECTION_WALLPAPERS,
       ...NASA_HUBBLE_NEBULA_COLLECTION_WALLPAPERS,
-      ...NASA_SOLAR_SYSTEM_COLLECTION_WALLPAPERS
+      ...NASA_SOLAR_SYSTEM_COLLECTION_WALLPAPERS,
+      ...NASA_SPACE_SHUTTLE_LAUNCH_COLLECTION_WALLPAPERS
     ].map((item) => [item.id, item])
   ).values()
 );
@@ -1040,6 +1208,11 @@ export const WALLPAPER_SOURCES = {
         "name": "All NASA Collection",
         wallpapers: ALL_NASA_WALLPAPERS
       },
+      "nasa-apollo-legacy-collection": {
+        "id": "nasa-apollo-legacy-collection",
+        "name": "Apollo Legacy",
+        wallpapers: NASA_APOLLO_LEGACY_COLLECTION_WALLPAPERS
+      },
       "nasa-deep-space-collection": {
         "id": "nasa-deep-space-collection",
         "name": "Deep Space",
@@ -1059,6 +1232,11 @@ export const WALLPAPER_SOURCES = {
         "id": "nasa-solar-system-collection",
         "name": "Solar System",
         wallpapers: NASA_SOLAR_SYSTEM_COLLECTION_WALLPAPERS
+      },
+      "nasa-space-shuttle-launch-collection": {
+        "id": "nasa-space-shuttle-launch-collection",
+        "name": "Space Shuttle Launches",
+        wallpapers: NASA_SPACE_SHUTTLE_LAUNCH_COLLECTION_WALLPAPERS
       }
     },
   },
